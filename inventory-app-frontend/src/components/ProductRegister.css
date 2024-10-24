@@ -1,0 +1,52 @@
+/* src/ProductRegister.css */
+
+.container {
+    max-width: 600px; /* Set a maximum width for the form */
+    margin: 0 auto;   /* Center the form */
+    padding: 20px;    /* Add some padding */
+    background-color: #f8f9fa; /* Light background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+h2 {
+    text-align: center; /* Center the heading */
+    margin-bottom: 20px; /* Space below heading */
+    color: #343a40; /* Darker color for the heading */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Space between form fields */
+}
+
+label {
+    font-weight: bold; /* Make labels bold */
+}
+
+.form-control {
+    width: 100%; /* Full width */
+    padding: 10px; /* Padding inside inputs */
+    border: 1px solid #ced4da; /* Border color */
+    border-radius: 5px; /* Rounded edges */
+    transition: border-color 0.3s; /* Smooth transition for focus */
+}
+
+.form-control:focus {
+    border-color: #80bdff; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+.btn {
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white; /* Text color */
+    padding: 10px; /* Button padding */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded edges */
+    cursor: pointer; /* Pointer cursor on hover */
+    width: 100%; /* Full width */
+    transition: background-color 0.3s; /* Smooth transition for hover */
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}

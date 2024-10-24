@@ -47,6 +47,7 @@ productRouters.route("/product/:id").get(async (request, response) => {
 
 //# 3. Create
 productRouters.route("/product").post(async (request, response) => {
+
     try {
         let db = database.getDb();
         let mongoObject = {
