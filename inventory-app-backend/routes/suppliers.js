@@ -27,7 +27,7 @@ supplierRouters.route("/supplier/:id").get(async (request, response) => {
         const supplierId = request.params.id;
 
         // Validate ObjectId
-        if (!ObjectId.isValid(productId)) {
+        if (!ObjectId.isValid(supplierId)) {
             return response.status(400).json({ message: "Invalid ObjectId format" });
         }
 
