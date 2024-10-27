@@ -55,6 +55,7 @@ productRouters.route("/product").post(async (request, response) => {
             sku: request.body.sku,
             description: request.body.description,
             quantity: request.body.quantity,
+            stock:request.body.quantity,
             price: request.body.price,
             category: request.body.category,
             supplier: request.body.supplier,

@@ -8,6 +8,7 @@ import "../css/regForm.css"
 const ProductRegistration = () => {
     // State to hold the selected supplier value
     const [selectedValue, setSelectedValue] = useState('');
+    const [newSKU, setnewSKU] = useState('');
 
     // State to hold product details
     const [product, setProduct] = useState({
@@ -18,8 +19,25 @@ const ProductRegistration = () => {
         description: '',
         supplier: '',
         category: '',
+        stock:'',
         date: '',
     });
+
+
+    //Inserting to SKU Number
+    function replaceAtIndex(originalString, index, textToReplace) {
+        if (index < 0 || index >= originalString.length) {
+            console.error("Index out of bounds");
+            return originalString; // Return original if index is invalid
+        }
+    
+        // Use slice to replace text
+        return originalString.slice(0, index) + textToReplace + originalString.slice(index + textToReplace.length);
+    }
+
+    //state to hold SKU Number
+    // let addSku = "SKU/CAT/SUP/###";
+    // const [skuTextBox, setskuTextBox] = useState('SKU/CAT/SUP/###');
 
     // Handle changes in input fields
     const handleChange = (e) => {
@@ -41,18 +59,46 @@ const ProductRegistration = () => {
         }
     };
 
+    const [addSku, setAddSku] = useState("SKU/CA/SU/"); // Initializing Sku Number
+    const [skuTextBox, setSkuTextBox] = useState("");
+
     // Handle changes in the supplier select box
     const handleSelectSupplierChange = (value) => {
         setSelectedValue(value); // Update the selected value
-        setProduct({ ...product, ["supplier"]: value }); // Update the product state with the selected supplier
+       // setProduct({ ...product, ["supplier"]: value }); // Update the product state with the selected supplier
+        const supplierName = value.substring(0, 2);
+        const selectedSKU = supplierName.toUpperCase();
+        const newText = replaceAtIndex(addSku, 7, selectedSKU); // Replace at index 6
+        const randomNum = Math.floor(Math.random() * 1000);
+        setAddSku(newText); // Step 2: Update the state with the new SKU
+        setSkuTextBox(newText+randomNum); // Update textbox state
+        setProduct({ ...product, ["sku"]: newText+randomNum, ["supplier"]: value });
+        
     };
 
 
     // Handle changes in the category select box
     const handleSelectCategoryChange = (value) => {
-        setSelectedValue(value); // Update the selected value
-        setProduct({ ...product, ["category"]: value }); // Update the product state with the selected supplier
+        setProduct({ ...product, category: value }); // Update the product state with the selected category
+        const categoryName = value.substring(0, 2);
+        const selectedSKU = categoryName.toUpperCase();
+        const newText = replaceAtIndex(addSku, 4, selectedSKU); // Replace at index 4
+        
+        setAddSku(newText); // Step 2: Update the state with the new SKU 
+        setSkuTextBox(newText); // Update textbox state
+        
+        
     };
+
+
+
+// Handle Form Reset Button
+    const handleReset = () => {
+       
+        window.location.href = window.location.href;
+    };
+
+
 
     return (
         <div className="container mt-5">
@@ -107,22 +153,13 @@ const ProductRegistration = () => {
                 {/* Category Select Box */}
                 <div className="form-group">
                     <label>Product Category:</label>
+
                     <SelectCategory
+                        name="category"
                         onSelectChange={handleSelectCategoryChange} // Pass the handler to the SelectSupplier component
                         required
                     />
                 </div>
-                {/* <div className="form-group">
-                    <label>Category:</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        name="category"
-                        value={product.category}
-                        onChange={handleChange}
-                        required
-                    />
-                </div> */}
 
                 {/* Supplier Select Box */}
                 <div className="form-group">
@@ -138,9 +175,11 @@ const ProductRegistration = () => {
                     <label>SKU:</label>
                     <input
                         type="text"
+                         disabled = "true"
+                        id= "SKU"
                         className="form-control"
                         name="sku"
-                        value={product.sku}
+                        value={skuTextBox}
                         onChange={handleChange}
                         required
                     />
@@ -159,6 +198,8 @@ const ProductRegistration = () => {
                 </div>
                 {/* Submit Button */}
                 <button type="submit" className="btn btn-primary btn-block">Register Product</button>
+                {/* Reset Button */}
+                <button type="button" className="btn btn-secondary" onClick={handleReset}>Reset</button>
             </form>
         </div>
     );
