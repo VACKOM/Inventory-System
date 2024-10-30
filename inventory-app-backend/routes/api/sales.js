@@ -1,14 +1,14 @@
 const express = require("express");
-const database = require("../config/connect");
+const database = require("../../config/connect");
 const { ObjectId } = require("mongodb");
 
-let productRouters = express.Router();
+let salesRouters = express.Router();
 
-//# 1. Retrieve All Products
-productRouters.route("/product").get(async (request, response) => {
+//# 1. Retrieve All Sales
+salesRouters.route("/").get(async (request, response) => {
     try {
         let db = database.getDb();
-        let data = await db.collection("products").find({}).toArray();
+        let data = await db.collection("sales").find({}).toArray();
         if (data.length > 0) {
             response.json(data);
         } else {
@@ -21,18 +21,18 @@ productRouters.route("/product").get(async (request, response) => {
 
 
 
-//# 2. Retrieve One Product
-productRouters.route("/product/:id").get(async (request, response) => {
+//# 2. Retrieve One Sale
+salesRouters.route("/:id").get(async (request, response) => {
     try {
-        const productId = request.params.id;
+        const saleId = request.params.id;
 
         // Validate ObjectId
-        if (!ObjectId.isValid(productId)) {
+        if (!ObjectId.isValid(saleId)) {
             return response.status(400).json({ message: "Invalid ObjectId format" });
         }
 
         let db = database.getDb();
-        let data = await db.collection("products").findOne({ _id: new ObjectId(productId) });
+        let data = await db.collection("sales").findOne({ _id: new ObjectId(saleId) });
 
         if (data) {
             response.json(data);
@@ -46,22 +46,26 @@ productRouters.route("/product/:id").get(async (request, response) => {
 });
 
 //# 3. Create
-productRouters.route("/product").post(async (request, response) => {
+salesRouters.route("/").post(async (request, response) => {
 
     try {
         let db = database.getDb();
         let mongoObject = {
-            name: request.body.name,
-            sku: request.body.sku,
-            description: request.body.description,
+            saleid: request.body.saleid,
+            productid: request.body.productid,
+            productname: request.body.productname,
             quantity: request.body.quantity,
-            stock:request.body.quantity,
             price: request.body.price,
-            category: request.body.category,
-            supplier: request.body.supplier,
+            total: request.body.total,
+            customerid:request.body.customerid,
+            paymentmethod:request.body.paymentmethod,
+            salespersonid:request.body.salespersonid,
+            discount:request.body.discount,
+            tax:request.body.tax,
+            notes: request.body.notes,
             date: request.body.date
         };
-        let data = await db.collection("products").insertOne(mongoObject);
+        let data = await db.collection("sales").insertOne(mongoObject);
         response.status(201).json(data);
     } catch (error) {
         response.status(500).json({ message: error.message });
@@ -69,22 +73,27 @@ productRouters.route("/product").post(async (request, response) => {
 });
 
 //# 4. Update
-productRouters.route("/product/:id").put(async (request, response) => {
+salesRouters.route("/:id").put(async (request, response) => {
     try {
         let db = database.getDb();
         let mongoObject = {
             $set: {
-                name: request.body.name,
-                sku: request.body.sku,
-                description: request.body.description,
+                saleid: request.body.saleid,
+                productid: request.body.productid,
+                productname: request.body.productname,
                 quantity: request.body.quantity,
                 price: request.body.price,
-                category: request.body.category,
-                supplier: request.body.supplier,
+                total: request.body.total,
+                customerid:request.body.customerid,
+                paymentmethod:request.body.paymentmethod,
+                salespersonid:request.body.salespersonid,
+                discount:request.body.discount,
+                tax:request.body.tax,
+                notes: request.body.notes,
                 date: request.body.date
             }
         };
-        let data = await db.collection("products").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);
+        let data = await db.collection("sales").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);
         if (data.modifiedCount > 0) {
             response.json(data);
         } else {
@@ -96,12 +105,12 @@ productRouters.route("/product/:id").put(async (request, response) => {
 });
 
 //# 5. Delete
-productRouters.route("/product/:id").delete(async (request, response) => {
+salesRouters.route("/:id").delete(async (request, response) => {
     try {
         let db = database.getDb();
-        let data = await db.collection("products").deleteOne({ _id: ObjectId(request.params.id) });
+        let data = await db.collection("sales").deleteOne({ _id: ObjectId(request.params.id) });
         if (data.deletedCount > 0) {
-            response.json({ message: "Product Deleted Successfully" });
+            response.json({ message: "Sale Deleted Successfully" });
         } else {
             response.status(404).json({ message: "No Record Found to Delete :(" });
         }
@@ -110,6 +119,4 @@ productRouters.route("/product/:id").delete(async (request, response) => {
     }
 });
 
-module.exports = productRouters;
-
-
+module.exports = salesRouters;

@@ -10,7 +10,7 @@ const selectSelectCategory = ({ onSelectChange }) => {
     useEffect(() => {
         const fetchCategory = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/category");
+                const response = await axios.get("http://localhost:3000/api/category");
                 setCategory(response.data); // Adjust according to your API response
             } catch (error) {
                 console.error("Error fetching category:", error);

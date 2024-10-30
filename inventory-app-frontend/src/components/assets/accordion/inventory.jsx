@@ -61,7 +61,7 @@ const Accordion = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/category');
+                const response = await axios.get('http://localhost:3000/api/category');
                 setItems(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -75,7 +75,7 @@ const Accordion = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/product');
+                const response = await axios.get('http://localhost:3000/api/product');
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error fetching products:', error);

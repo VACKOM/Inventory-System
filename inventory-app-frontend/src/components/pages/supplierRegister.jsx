@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
-import "../productRegister.css"
+import "../css/regForm.css"
 
 
 const SupplierRegistration = () => {
@@ -22,7 +22,7 @@ const SupplierRegistration = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/supplier', supplier);
+            const response = await axios.post('http://localhost:3000/api/supplier', supplier);
             alert('Supplier registered successfully!');
             console.log(response.data);
         } catch (error) {

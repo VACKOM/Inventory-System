@@ -15,7 +15,7 @@ let database;
 module.exports = {
     connectToServer: () =>{
         database = client.db("inventoryData");
-        console.log('Connected to database:', database.databaseName);
+        //console.log('Connected to database:', database.databaseName);
     },
     getDb: () =>{
    

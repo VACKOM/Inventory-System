@@ -1,11 +1,11 @@
 const express = require("express");
-const database = require("../config/connect");
+const database = require("../../config/connect");
 const { ObjectId } = require("mongodb");
 
 let supplierRouters = express.Router();
 
 //# 1. Retrieve All Products
-supplierRouters.route("/supplier").get(async (request, response) => {
+supplierRouters.route("/").get(async (request, response) => {
     try {
         let db = database.getDb();
         let data = await db.collection("suppliers").find({}).toArray();
@@ -22,7 +22,7 @@ supplierRouters.route("/supplier").get(async (request, response) => {
 
 
 //# 2. Retrieve One Product
-supplierRouters.route("/supplier/:id").get(async (request, response) => {
+supplierRouters.route("/:id").get(async (request, response) => {
     try {
         const supplierId = request.params.id;
 
@@ -46,7 +46,7 @@ supplierRouters.route("/supplier/:id").get(async (request, response) => {
 });
 
 //# 3. Create
-supplierRouters.route("/supplier").post(async (request, response) => {
+supplierRouters.route("/").post(async (request, response) => {
     try {
         let db = database.getDb();
         let mongoObject = {
@@ -65,7 +65,7 @@ supplierRouters.route("/supplier").post(async (request, response) => {
 });
 
 //# 4. Update
-supplierRouters.route("/supplier/:id").put(async (request, response) => {
+supplierRouters.route("/:id").put(async (request, response) => {
     try {
         let db = database.getDb();
         let mongoObject = {
@@ -90,7 +90,7 @@ supplierRouters.route("/supplier/:id").put(async (request, response) => {
 });
 
 //# 5. Delete
-supplierRouters.route("/supplier/:id").delete(async (request, response) => {
+supplierRouters.route("/:id").delete(async (request, response) => {
     try {
         let db = database.getDb();
         let data = await db.collection("suppliers").deleteOne({ _id: ObjectId(request.params.id) });

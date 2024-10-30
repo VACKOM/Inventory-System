@@ -1,7 +1,5 @@
 import React, {useState} from "react";
 import axios from "axios";
-import SelectSupplier from "../assets/SelectBoxes/SelectSupplier"// Assuming SelectSupplier is imported
-import SelectCategory from "../assets/SelectBoxes/SelectCategory";
 import "../css/regForm.css"
 
 

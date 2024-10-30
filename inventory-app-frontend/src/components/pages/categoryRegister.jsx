@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import axios from "axios";
-import "../productRegister.css"
+import "../css/regForm.css"
 
 
 const CategoryRegistration = () => {
-    const [category, setSupplier] = useState({
+    const [category, setCategory] = useState({
         name: '',
         description: '',
         date:''
@@ -13,13 +13,13 @@ const CategoryRegistration = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setSupplier({ ...category, [name]: value });
+        setCategory({ ...category, [name]: value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/category', category);
+            const response = await axios.post('http://localhost:3000/api/category', category);
             alert('Product Category registered successfully!');
             console.log(response.data);
         } catch (error) {

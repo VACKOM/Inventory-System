@@ -4,6 +4,8 @@ import { useState } from 'react'
 //import CategoryRegistration from './components/pages/categoryRegister'
 //import SelectTest from './components/assets/selectTest'
 import InventoryTracker from './components/pages/inventoryTracker'
+//import CustomerRegistration from './components/pages/customerRegister';
+//import SalesPersonRegistration from './components/pages/salesperson';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 

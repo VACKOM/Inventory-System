@@ -17,7 +17,6 @@ const ParentComponent = () => {
             {items.map((item, index) => (
                 <AccordionItem
                     key={index}
-            
                     content={item} // Pass the body content
                     isOpen={openIndex === index}
                     toggleAccordion={() => toggleAccordion(index)}

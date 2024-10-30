@@ -1,14 +1,14 @@
 const express = require("express");
-const database = require("../config/connect");
+const database = require("../../config/connect");
 const { ObjectId } = require("mongodb");
 
-let categoryRouters = express.Router();
+let customerRouters = express.Router();
 
-//# 1. Retrieve All categories
-categoryRouters.route("/category").get(async (request, response) => {
+//# 1. Retrieve All Customers
+customerRouters.route("/").get(async (request, response) => {
     try {
         let db = database.getDb();
-        let data = await db.collection("categories").find({}).toArray();
+        let data = await db.collection("customers").find({}).toArray();
         if (data.length > 0) {
             response.json(data);
         } else {
@@ -21,18 +21,18 @@ categoryRouters.route("/category").get(async (request, response) => {
 
 
 
-//# 2. Retrieve One Category
-categoryRouters.route("/category/:id").get(async (request, response) => {
+//# 2. Retrieve One Customer
+customerRouters.route("/:id").get(async (request, response) => {
     try {
-        const categoryId = request.params.id;
+        const customerId = request.params.id;
 
         // Validate ObjectId
-        if (!ObjectId.isValid(productId)) {
+        if (!ObjectId.isValid(customerId)) {
             return response.status(400).json({ message: "Invalid ObjectId format" });
         }
 
         let db = database.getDb();
-        let data = await db.collection("categories").findOne({ _id: new ObjectId(categoryId) });
+        let data = await db.collection("customers").findOne({ _id: new ObjectId(customerId) });
 
         if (data) {
             response.json(data);
@@ -46,15 +46,22 @@ categoryRouters.route("/category/:id").get(async (request, response) => {
 });
 
 //# 3. Create
-categoryRouters.route("/category").post(async (request, response) => {
+customerRouters.route("/").post(async (request, response) => {
+
     try {
         let db = database.getDb();
         let mongoObject = {
-            name: request.body.name,
-            description: request.body.description,
+            customerid: request.body.customerid,
+            fname: request.body.fname,
+            lname: request.body.lname,
+            email: request.body.email,
+            number: request.body.number,
+            address: request.body.address,
+            dob:request.body.dob,
+            notes: request.body.notes,
             date: request.body.date
         };
-        let data = await db.collection("categories").insertOne(mongoObject);
+        let data = await db.collection("customers").insertOne(mongoObject);
         response.status(201).json(data);
     } catch (error) {
         response.status(500).json({ message: error.message });
@@ -62,17 +69,23 @@ categoryRouters.route("/category").post(async (request, response) => {
 });
 
 //# 4. Update
-categoryRouters.route("/category/:id").put(async (request, response) => {
+customerRouters.route("/:id").put(async (request, response) => {
     try {
         let db = database.getDb();
         let mongoObject = {
             $set: {
-                name: request.body.name,
-                description: request.body.description,
+                customerid: request.body.customerid,
+                fname: request.body.fname,
+                lname: request.body.lname,
+                email: request.body.email,
+                number: request.body.number,
+                address: request.body.address,
+                dob:request.body.dob,
+                notes: request.body.notes,
                 date: request.body.date
             }
         };
-        let data = await db.collection("categories").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);
+        let data = await db.collection("customers").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);
         if (data.modifiedCount > 0) {
             response.json(data);
         } else {
@@ -84,12 +97,12 @@ categoryRouters.route("/category/:id").put(async (request, response) => {
 });
 
 //# 5. Delete
-categoryRouters.route("/category/:id").delete(async (request, response) => {
+customerRouters.route("/:id").delete(async (request, response) => {
     try {
         let db = database.getDb();
-        let data = await db.collection("categories").deleteOne({ _id: ObjectId(request.params.id) });
+        let data = await db.collection("customers").deleteOne({ _id: ObjectId(request.params.id) });
         if (data.deletedCount > 0) {
-            response.json({ message: "Category Deleted Successfully" });
+            response.json({ message: "Customer Deleted Successfully" });
         } else {
             response.status(404).json({ message: "No Record Found to Delete :(" });
         }
@@ -98,6 +111,4 @@ categoryRouters.route("/category/:id").delete(async (request, response) => {
     }
 });
 
-module.exports = categoryRouters;
-
-
+module.exports = customerRouters;
