@@ -53,7 +53,7 @@ productRouters.route("/").post(async (request, response) => {
             description: request.body.description,
             category: request.body.category,
             supplier: request.body.supplier,
-            date: request.body.date
+            date: new Date(),
         };
         let data = await db.collection("products").insertOne(mongoObject);
         response.status(201).json(data);
@@ -73,7 +73,7 @@ productRouters.route("/:id").put(async (request, response) => {
                 description: request.body.description,
                 category: request.body.category,
                 supplier: request.body.supplier,
-                date: request.body.date
+               // date: request.body.date
             }
         };
         let data = await db.collection("products").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);

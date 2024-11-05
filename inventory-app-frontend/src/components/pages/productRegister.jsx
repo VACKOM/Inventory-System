@@ -19,8 +19,8 @@ const ProductRegistration = () => {
         description: '',
         supplier: '',
         category: '',
-        stock:'',
-        date: '',
+        stock:''
+        
     });
 
 
@@ -102,7 +102,7 @@ const ProductRegistration = () => {
 
     return (
         <div className="container mt-5">
-            <h2>New Stock Registration</h2>
+            <h2>Product Registration</h2>
             <form onSubmit={handleSubmit}>
                 {/* Product Name Input */}
                 <div className="form-group">
@@ -161,21 +161,12 @@ const ProductRegistration = () => {
                         required
                     />
                 </div>
-                {/* Product Date Input */}
-                <div className="form-group">
-                    <label>Date:</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        name="date"
-                        value={product.date}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
+            
+                
                 {/* Submit Button */}
-                <button type="submit" className="btn btn-primary btn-block">Register Product</button>
+                <button type="submit" className="btn btn-primary btn-block mb-2">Register Product</button>
                 {/* Reset Button */}
+                
                 <button type="button" className="btn btn-secondary" onClick={handleReset}>Reset</button>
             </form>
         </div>

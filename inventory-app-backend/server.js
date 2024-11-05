@@ -9,6 +9,8 @@ const customer = require("./routes/api/customers")
 const sales = require("./routes/api/sales");
 const reorder = require("./routes/api/reorders");
 const salesperson = require("./routes/api/salesPeople");
+const stock = require("./routes/api/stock")
+const stockRouter = require("./routes/api/stockRouter")
 const app = express();
 const PORT = 3000;
 
@@ -23,7 +25,8 @@ app.use('/api/customer', customer);
 app.use('/api/sales', sales);
 app.use('/api/salesperson',salesperson);
 app.use('/api/reorder', reorder);
-
+app.use('/api/stock', stock);
+app.use('/api/stockRouter', stockRouter)
 //Connect to the database and then start the server
 app.listen(PORT, () =>{
     connect.connectToServer();

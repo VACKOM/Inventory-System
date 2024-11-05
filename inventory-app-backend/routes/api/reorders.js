@@ -57,11 +57,11 @@ reorderRouters.route("/").post(async (request, response) => {
             quantity: request.body.quantity,
             price: request.body.price,
             total: request.body.total,
-            supplierid:request.body.supplierid,
+            supplier:request.body.supplier,
             batchno:request.body.batchno,
             expiringdate:request.body.expiringdate,
             notes: request.body.notes,
-            date: request.body.date
+            date: new Date(),
         };
         let data = await db.collection("reorders").insertOne(mongoObject);
         response.status(201).json(data);

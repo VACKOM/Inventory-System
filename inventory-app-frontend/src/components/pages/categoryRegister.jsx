@@ -6,8 +6,8 @@ import "../css/regForm.css"
 const CategoryRegistration = () => {
     const [category, setCategory] = useState({
         name: '',
-        description: '',
-        date:''
+        description: ''
+        
         
     });
 
@@ -22,17 +22,23 @@ const CategoryRegistration = () => {
             const response = await axios.post('http://localhost:3000/api/category', category);
             alert('Product Category registered successfully!');
             console.log(response.data);
+            window.location.reload();
         } catch (error) {
             console.error('There was an error registering this Product Category!', error);
             alert('Error registering Product Category');
         }
     };
 
+    // Handle Form Reset Button
+    const handleReset = () => {
+        window.location.href = window.location.href;
+    };
+
     return (
         
 
         <div className="container mt-5">
-            <h2>New Category Registration</h2>
+            <h2>Category Registration</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Name:</label>
@@ -56,18 +62,10 @@ const CategoryRegistration = () => {
                     />
                 </div>
                
-                <div className="form-group">
-                    <label>Date:</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        name="date"
-                        value={category.date}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit" className="btn btn-primary btn-block">Register Product Category</button>
+             {/* Submit Button */}
+                <button type="submit" className="btn btn-primary btn-block mb-2">Register Product Category</button>
+                {/* Reset Button */}     
+                <button type="button" className="btn btn-secondary" onClick={handleReset}>Reset</button>
             </form>
         </div>
 

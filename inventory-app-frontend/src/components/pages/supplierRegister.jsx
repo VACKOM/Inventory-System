@@ -9,8 +9,8 @@ const SupplierRegistration = () => {
         contactPerson: '',
         contactNumber: '',
         email: '',
-        productSupplied: '',
-        date:''
+        productSupplied: ''
+       
         
     });
 
@@ -31,11 +31,16 @@ const SupplierRegistration = () => {
         }
     };
 
+     // Handle Form Reset Button
+     const handleReset = () => {
+        window.location.href = window.location.href;
+    };
+
     return (
         
 
         <div className="container mt-5">
-            <h2>New Supplier Registration</h2>
+            <h2>Supplier Registration</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Name:</label>
@@ -92,18 +97,11 @@ const SupplierRegistration = () => {
                         required
                     />
                 </div>
-                <div className="form-group">
-                    <label>Date:</label>
-                    <input
-                        type="date"
-                        className="form-control"
-                        name="date"
-                        value={supplier.date}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit" className="btn btn-primary btn-block">Register Supplier</button>
+               
+                {/* Submit Button */}
+                <button type="submit" className="btn btn-primary btn-block mb-2">Register Supplier</button>
+                {/* Reset Button */}
+                <button type="button" className="btn btn-secondary" onClick={handleReset}>Reset</button>
             </form>
         </div>
 

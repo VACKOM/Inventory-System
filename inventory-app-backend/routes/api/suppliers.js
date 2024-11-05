@@ -55,7 +55,7 @@ supplierRouters.route("/").post(async (request, response) => {
             contactNumber: request.body.contactNumber,
             email: request.body.email,
             productSupplied: request.body.productSupplied,
-            date: request.body.date
+            date: new Date(),
         };
         let data = await db.collection("suppliers").insertOne(mongoObject);
         response.status(201).json(data);
@@ -75,7 +75,7 @@ supplierRouters.route("/:id").put(async (request, response) => {
                 contactNumber: request.body.contactNumber,
                 email: request.body.email,
                 productSupplied: request.body.productSupplied,
-                date: request.body.date
+               // date: request.body.date
             }
         };
         let data = await db.collection("suppliers").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);

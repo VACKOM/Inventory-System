@@ -24,15 +24,15 @@ salesRouters.route("/").get(async (request, response) => {
 //# 2. Retrieve One Sale
 salesRouters.route("/:id").get(async (request, response) => {
     try {
-        const saleId = request.params.id;
+        const salesId = request.params.id;
 
         // Validate ObjectId
-        if (!ObjectId.isValid(saleId)) {
+        if (!ObjectId.isValid(salesId)) {
             return response.status(400).json({ message: "Invalid ObjectId format" });
         }
 
         let db = database.getDb();
-        let data = await db.collection("sales").findOne({ _id: new ObjectId(saleId) });
+        let data = await db.collection("sales").findOne({ _id: new ObjectId(salesId) });
 
         if (data) {
             response.json(data);
@@ -47,27 +47,47 @@ salesRouters.route("/:id").get(async (request, response) => {
 
 //# 3. Create
 salesRouters.route("/").post(async (request, response) => {
-
     try {
+        const {
+            productid,
+            productname,
+            quantity,
+            price,
+            total,
+            customerid,
+            paymentmethod,
+            salesperson,
+            discount,
+            tax,
+            notes,
+            date
+        } = request.body;
+
+        // Basic validation
+        if (!productid || !quantity || !price) {
+            return response.status(400).json({ message: "Product ID, quantity, and price are required." });
+        }
+
         let db = database.getDb();
         let mongoObject = {
-            saleid: request.body.saleid,
-            productid: request.body.productid,
-            productname: request.body.productname,
-            quantity: request.body.quantity,
-            price: request.body.price,
-            total: request.body.total,
-            customerid:request.body.customerid,
-            paymentmethod:request.body.paymentmethod,
-            salespersonid:request.body.salespersonid,
-            discount:request.body.discount,
-            tax:request.body.tax,
-            notes: request.body.notes,
-            date: request.body.date
+            productid,
+            productname,
+            quantity,
+            price,
+            total,
+            customerid,
+            paymentmethod,
+            salesperson,
+            discount,
+            tax,
+            notes,
+            date
         };
+
         let data = await db.collection("sales").insertOne(mongoObject);
-        response.status(201).json(data);
+        response.status(201).json({ ...mongoObject, _id: data.insertedId });
     } catch (error) {
+        console.error('Error creating sale:', error); // Log the error
         response.status(500).json({ message: error.message });
     }
 });
@@ -78,19 +98,18 @@ salesRouters.route("/:id").put(async (request, response) => {
         let db = database.getDb();
         let mongoObject = {
             $set: {
-                saleid: request.body.saleid,
-                productid: request.body.productid,
-                productname: request.body.productname,
-                quantity: request.body.quantity,
-                price: request.body.price,
-                total: request.body.total,
-                customerid:request.body.customerid,
-                paymentmethod:request.body.paymentmethod,
-                salespersonid:request.body.salespersonid,
-                discount:request.body.discount,
-                tax:request.body.tax,
-                notes: request.body.notes,
-                date: request.body.date
+            productid: request.body.productid,
+            productname: request.body.productname,
+            quantity: request.body.quantity,
+            price: request.body.price,
+            total: request.body.total,
+            customerid: request.body.customerid,
+            paymentmethod:request.body.paymentmethod,
+            salesperson:request.body.salesperson,
+            discount:request.body.discount,
+            tax:request.body.tax,
+            notes: request.body.notes,
+            date:new Date(),
             }
         };
         let data = await db.collection("sales").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);
@@ -110,7 +129,7 @@ salesRouters.route("/:id").delete(async (request, response) => {
         let db = database.getDb();
         let data = await db.collection("sales").deleteOne({ _id: ObjectId(request.params.id) });
         if (data.deletedCount > 0) {
-            response.json({ message: "Sale Deleted Successfully" });
+            response.json({ message: "Sales Deleted Successfully" });
         } else {
             response.status(404).json({ message: "No Record Found to Delete :(" });
         }

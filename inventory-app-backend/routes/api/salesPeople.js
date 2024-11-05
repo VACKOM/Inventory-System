@@ -61,7 +61,7 @@ salesPersonRouters.route("/").post(async (request, response) => {
             dob:request.body.dob,
             position:request.body.position,
             notes: request.body.notes,
-            date: request.body.date
+            date: new Date(),
         };
         let data = await db.collection("salesperson").insertOne(mongoObject);
         response.status(201).json(data);
@@ -84,7 +84,7 @@ salesPersonRouters.route("/:id").put(async (request, response) => {
                 dob:request.body.dob,
                 position:request.body.position,
                 notes: request.body.notes,
-                date: request.body.date
+               // date: request.body.date
             }
         };
         let data = await db.collection("salesperson").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);

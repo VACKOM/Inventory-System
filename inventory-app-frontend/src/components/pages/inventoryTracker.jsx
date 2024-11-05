@@ -13,7 +13,9 @@ const ParentComponent = () => {
     };
 
     return (
+        
         <div className="accordion">
+             <h2>Inventory Tracker</h2>
             {items.map((item, index) => (
                 <AccordionItem
                     key={index}

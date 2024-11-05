@@ -36,11 +36,16 @@ const SalesPersonRegistration = () => {
         }
     };
 
+     // Handle Form Reset Button
+     const handleReset = () => {
+        window.location.href = window.location.href;
+    };
+
     return (
         
 
         <div className="container mt-5">
-            <h2>New Sales Person Registration</h2>
+            <h2>Sales Person Register</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Sales Person ID:</label>
@@ -147,7 +152,9 @@ const SalesPersonRegistration = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">Register New Sales Person</button>
+                <button type="submit" className="btn btn-primary btn-block mb-2">Register New Sales Person</button>
+            {/* Reset Button */}     
+            <button type="button" className="btn btn-secondary" onClick={handleReset}>Reset</button>
             </form>
         </div>
 

@@ -59,7 +59,7 @@ customerRouters.route("/").post(async (request, response) => {
             address: request.body.address,
             dob:request.body.dob,
             notes: request.body.notes,
-            date: request.body.date
+            date: new Date(),
         };
         let data = await db.collection("customers").insertOne(mongoObject);
         response.status(201).json(data);
@@ -82,7 +82,7 @@ customerRouters.route("/:id").put(async (request, response) => {
                 address: request.body.address,
                 dob:request.body.dob,
                 notes: request.body.notes,
-                date: request.body.date
+               // date: request.body.date
             }
         };
         let data = await db.collection("customers").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);
