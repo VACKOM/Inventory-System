@@ -36,7 +36,7 @@ const CategoryRegistration = () => {
 
     return (
         
-
+// Category registration form
         <div className="container mt-5">
             <h2>Category Registration</h2>
             <form onSubmit={handleSubmit}>
