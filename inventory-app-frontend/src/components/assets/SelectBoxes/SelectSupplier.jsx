@@ -10,7 +10,7 @@ const selectSelectSupplier = ({ onSelectChange }) => {
     useEffect(() => {
         const fetchSuppliers = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/supplier");
+                const response = await axios.get("https://node-js-inventory-system.onrender.com/api/supplier");
                 setSuppliers(response.data); // Adjust according to your API response
             } catch (error) {
                 console.error("Error fetching suppliers:", error);

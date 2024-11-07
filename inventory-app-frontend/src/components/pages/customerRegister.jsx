@@ -26,7 +26,7 @@ const CustomerRegistration = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/api/customer', customer);
+            const response = await axios.post('https://node-js-inventory-system.onrender.com/api/customer', customer);
             alert('Customer registered successfully!');
             console.log(response.data);
         } catch (error) {

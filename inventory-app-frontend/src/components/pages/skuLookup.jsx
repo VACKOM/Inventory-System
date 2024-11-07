@@ -46,7 +46,7 @@ const SKULookup = () => { // Component name should start with an uppercase lette
 
         if (inputSku) {
             try {
-                const response = await axios.get(`http://localhost:3000/api/stockRouter/sku/${inputSku}`);
+                const response = await axios.get(`https://node-js-inventory-system.onrender.com/stockRouter/sku/${inputSku}`);
                 setProductData(response.data);
                 setError('');
 
@@ -72,14 +72,14 @@ const handleSubmit = async (e) => {
     e.preventDefault();
     try {
         // Step 1: Record the sale
-        const response = await axios.post('http://localhost:3000/api/sales', sales);
+        const response = await axios.post('https://node-js-inventory-system.onrender.com/api/sales', sales);
         alert('Sales recorded successfully!');
         console.log(response.data);
 
         // Step 2: Update stock quantity
         const updatedQuantity = productData.quantity - sales.quantity; // Assuming `stock` is available in productData
 
-        await axios.put(`http://localhost:3000/api/stock/sku/${sales.productid}`, {
+        await axios.put(`https://node-js-inventory-system.onrender.com/api/stock/sku/${sales.productid}`, {
             quantity: updatedQuantity,
             price: sales.price,
             date: sales.date

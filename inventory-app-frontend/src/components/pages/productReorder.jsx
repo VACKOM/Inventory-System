@@ -47,12 +47,12 @@ const ProductReorder = () => {
         e.preventDefault();
         try {
             // Insert into the reorder collection
-            const reorderResponse = await axios.post('http://localhost:3000/api/reorder', reorder);
+            const reorderResponse = await axios.post('https://node-js-inventory-system.onrender.com/api/reorder', reorder);
             alert('Product successfully reordered!');
 
             // Try to get the current stock quantity
             try {
-                const stockResponse = await axios.get(`http://localhost:3000/api/stock/sku/${sku}`);
+                const stockResponse = await axios.get(`https://node-js-inventory-system.onrender.com/api/stock/sku/${sku}`);
                 const currentStock = stockResponse.data.quantity;
 
                 // Calculate new quantity
@@ -61,7 +61,7 @@ const ProductReorder = () => {
                 console.log("Updating stock with new quantity:", newQuantity);
 
                 // Update existing stock
-                await axios.put(`http://localhost:3000/api/stock/sku/${sku}`, {
+                await axios.put(`https://node-js-inventory-system.onrender.com/stock/sku/${sku}`, {
                     quantity: newQuantity,
                     price: reorder.price,
                     date: reorder.date
@@ -69,7 +69,7 @@ const ProductReorder = () => {
             } catch (stockError) {
                 if (stockError.response && stockError.response.status === 404) {
                     // SKU doesn't exist, create a new stock record
-                    await axios.post('http://localhost:3000/api/stock', {
+                    await axios.post('https://node-js-inventory-system.onrender.com/api/stock', {
                         sku: sku,
                         quantity: reorder.quantity,
                         price: reorder.price,

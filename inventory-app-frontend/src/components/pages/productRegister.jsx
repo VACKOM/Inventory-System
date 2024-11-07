@@ -50,7 +50,7 @@ const ProductRegistration = () => {
         e.preventDefault(); // Prevent the default form submission behavior
         try {
             // Send a POST request to register the product
-            const response = await axios.post('http://localhost:3000/api/product', product);
+            const response = await axios.post('https://node-js-inventory-system.onrender.com/api/product', product);
             alert('Product registered successfully!'); // Show success message
             console.log(response.data); // Log the response data
         } catch (error) {

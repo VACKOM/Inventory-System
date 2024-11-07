@@ -73,7 +73,7 @@ const Accordion = () => {
     useEffect(() => {
         const fetchItems = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/category');
+                const response = await axios.get('https://node-js-inventory-system.onrender.com/api/category');
                 setItems(response.data);
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -87,7 +87,7 @@ const Accordion = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/product');
+                const response = await axios.get('https://node-js-inventory-system.onrender.com/api/product');
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error fetching products:', error);
@@ -101,7 +101,7 @@ const Accordion = () => {
     useEffect(() => {
         const fetchStock = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/stock');
+                const response = await axios.get('https://node-js-inventory-system.onrender.com/api/stock');
                 setStock(response.data);
             } catch (error) {
                 console.error('Error fetching stock:', error);

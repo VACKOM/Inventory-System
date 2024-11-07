@@ -19,7 +19,7 @@ const CategoryRegistration = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/api/category', category);
+            const response = await axios.post('https://node-js-inventory-system.onrender.com/api/category', category);
             alert('Product Category registered successfully!');
             console.log(response.data);
             window.location.reload();
