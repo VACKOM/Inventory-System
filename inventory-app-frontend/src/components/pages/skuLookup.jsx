@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import QRCodeScanner from '../assets/CodeScanner/QRCodeScanner';
 import "../css/regForm.css";
 
-const SKULookup = () => { // Component name should start with an uppercase letter
+const SKULookup = () => { 
     const [sku, setSku] = useState('');
     const [productData, setProductData] = useState(null);
     const [error, setError] = useState('');
-    
+    const [scannedItem, setScannedItem] = useState(null);
+    const [showScanner, setShowScanner] = useState(true); // State to control scanner visibility
+
     const [sales, setSales] = useState({
         productid: '',
         productname: '',
@@ -22,109 +25,94 @@ const SKULookup = () => { // Component name should start with an uppercase lette
         date: ''
     });
 
-    // Handle changes in sales inputs
     const handleChangeText = (e) => {
         const { name, value } = e.target;
         let newSales = { ...sales, [name]: value };
 
-         // Calculate total if quantity and price are available
-         if (newSales.quantity && newSales.price) {
+        if (newSales.quantity && newSales.price) {
             newSales.total = parseFloat(newSales.quantity) * parseFloat(newSales.price);
-            newSales.price = parseFloat(newSales.price);
-            newSales.quantity = parseFloat(newSales.quantity);
         } else {
-            newSales.total = ''; // or 0 if you prefer
+            newSales.total = ''; 
         }
 
         setSales(newSales);
     };
 
     // Handle SKU input change and fetch product data
-    const handleChange = async (e) => {
-        const inputSku = e.target.value;
-        setSku(inputSku);
+    const handleScan = async (qrData) => {
+        setSku(qrData);
 
-        if (inputSku) {
-            try {
-                const response = await axios.get(`https://node-js-inventory-system.onrender.com/stockRouter/sku/${inputSku}`);
-                setProductData(response.data);
-                setError('');
-
-                // Update sales state with product data
-                setSales({
-                    ...sales,
-                    productid: response.data.sku,
-                    productname: response.data.productname,
-                    price: response.data.price
-                });
-            } catch (err) {
-                setProductData(null);
-                setError(err.response?.data?.message || 'Error fetching product data');
-            }
-        } else {
-            setProductData(null);
+        try {
+            const response = await axios.get(`https://node-js-inventory-system.onrender.com/api/stockRouter/sku/${qrData}`);
+            setProductData(response.data);
+            setScannedItem(response.data);
             setError('');
+            setShowScanner(false); // Hide the scanner after a successful scan
+            setSales({
+                ...sales,
+                productid: response.data.sku,
+                productname: response.data.productname,
+                price: response.data.price
+            });
+        } catch (err) {
+            setProductData(null);
+            setScannedItem(null);
+            setError(err.response?.data?.message || 'Error fetching product data');
         }
     };
 
-    // Handle form submission
-const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-        // Step 1: Record the sale
-        const response = await axios.post('https://node-js-inventory-system.onrender.com/api/sales', sales);
-        alert('Sales recorded successfully!');
-        console.log(response.data);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('https://node-js-inventory-system.onrender.com/api/sales', sales);
+            alert('Sales recorded successfully!');
+            console.log(response.data);
 
-        // Step 2: Update stock quantity
-        const updatedQuantity = productData.quantity - sales.quantity; // Assuming `stock` is available in productData
+            const updatedQuantity = productData.quantity - sales.quantity;
 
-        await axios.put(`https://node-js-inventory-system.onrender.com/api/stock/sku/${sales.productid}`, {
-            quantity: updatedQuantity,
-            price: sales.price,
-            date: sales.date
-        });
+            await axios.put(`https://node-js-inventory-system.onrender.com/api/stock/sku/${sales.productid}`, {
+                quantity: updatedQuantity,
+                price: sales.price,
+                date: sales.date
+            });
 
-        // Optionally reset the form
-        setSales({
-            productid: '',
-            productname: '',
-            quantity: '',
-            price: '',
-            total: '',
-            customerid: '',
-            paymentmethod: '',
-            salesperson: '',
-            discount: '',
-            tax: '',
-            notes: ''
-           
-        });
-        setSku('');
-        setProductData(null);
-    } catch (error) {
-        console.error('There was an error recording this sale!', error);
-        alert('Error recording sale');
-    }
-};
+            setSales({
+                productid: '',
+                productname: '',
+                quantity: '',
+                price: '',
+                total: '',
+                customerid: '',
+                paymentmethod: '',
+                salesperson: '',
+                discount: '',
+                tax: '',
+                notes: '',
+                date: ''
+            });
+            setSku('');
+            setProductData(null);
+            setScannedItem(null);
+            setShowScanner(true); // Re-show the scanner if you want to scan another item
+        } catch (error) {
+            console.error('There was an error recording this sale!', error);
+            alert('Error recording sale');
+        }
+    };
 
     return (
         <div>
-            <h2>Point Of Sales</h2>
-            <input
-                type="text"
-                value={sku}
-                onChange={handleChange}
-                placeholder="Enter SKU number"
-            />
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {productData && (
+            {/* <h2>Point Of Sales</h2> */}
+
+            {showScanner && <QRCodeScanner onScan={handleScan} />} {/* Only show scanner if showScanner is true */}
+
+            {scannedItem ? (
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <h3>Product Details:</h3>
-                        <p>SKU: {productData.sku}</p>
-                        <p>Product Name: {productData.productname}</p>
-                        <p>Price: ${productData.price}</p>
+                        <p>SKU: {scannedItem.sku}</p>
+                        <p>Product Name: {scannedItem.productname}</p>
+                        <p>Price: ${scannedItem.price}</p>
                     </div>
                     <div className="form-group">
                         <label>Quantity:</label>
@@ -143,7 +131,7 @@ const handleSubmit = async (e) => {
                             type="number"
                             className="form-control"
                             name="total"
-                            value={sales.total} // This should be calculated based on quantity and price
+                            value={sales.total}
                             onChange={handleChangeText}
                             readOnly
                         />
@@ -168,9 +156,9 @@ const handleSubmit = async (e) => {
                             required
                         >
                             <option value="" disabled>Select Payment Method</option>
-                            <option value='Cash'>Cash</option>
-                            <option value='Mobile Money'>Mobile Money</option>
-                            <option value='Visa Card'>Visa Card</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Mobile Money">Mobile Money</option>
+                            <option value="Visa Card">Visa Card</option>
                         </select>
                     </div>
                     <div className="form-group">
@@ -212,9 +200,11 @@ const handleSubmit = async (e) => {
                             onChange={handleChangeText}
                         />
                     </div>
-                  
+
                     <button type="submit" className="btn btn-primary btn-block">Record Sales</button>
                 </form>
+            ) : (
+                <p>Scan a QR code to display item details.</p>
             )}
         </div>
     );
