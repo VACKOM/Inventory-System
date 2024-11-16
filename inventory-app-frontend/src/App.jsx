@@ -1,37 +1,54 @@
-// App.js
 
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import MainMenu from './components/pages/mainMenu';
-import ProductRegistration from './components/pages/productRegister';
-import SupplierRegistration from './components/pages/supplierRegister';
-import CategoryRegistration from './components/pages/categoryRegister';
-import CustomerRegistration from './components/pages/customerRegister';
-import SalesPersonRegistration from './components/pages/salesperson';
-import InventoryTracker from './components/pages/inventoryTracker';
-import SkuLookup from './components/pages/skuLookup';
-import './App.css'; // Import any global styles
+import { ColorModeContext, useMode} from './theme';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import {Routes, Route} from "react-router-dom";
+import Topbar from './scenes/global/Topbar';
+import Sidebar from './scenes/global/SideBar';
+import Dashboard from "./scenes/dashboard";
+import Inventory from './scenes/inventory';
+import StockMovement from './scenes/stock';
+ import Alerts from './scenes/alerts';
+import Suppliers from './scenes/suppliers';
+import PurchaseOrders from './scenes/purchase';
+import SalesOrder from './scenes/sales';
+import Users from './scenes/users';
+import Reports from './scenes/reports';
+import Settings from './scenes/settings';
+import InventoryList from './scenes/inventory';
 
 const App = () => {
-    return (
-        <Router>
-            <div style={{ display: 'flex' }}>
-                <MainMenu />
-                <div className="content-area">
+    const [theme, colorMode] = useMode();
+    return ( 
+    <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider  theme={theme}>
+            <CssBaseline />
+             <div className="app">
+                <Sidebar/>
+                <main className='content'>
+                    <Topbar/>
                     <Routes>
-                        <Route path="/customer-register" element={<CustomerRegistration />} />
-                        <Route path="/product-register" element={<ProductRegistration />} />
-                        <Route path="/supplier-register" element={<SupplierRegistration />} />
-                        <Route path="/category-register" element={<CategoryRegistration />} />
-                        <Route path="/salesperson" element={<SalesPersonRegistration />} />
-                        <Route path="/sku-lookup" element={<SkuLookup />} />
-                        <Route path="/inventory-tracker" element={<InventoryTracker />} />
-                        <Route path="/" element={<h2>Welcome to the Dashboard</h2>} /> {/* Default route */}
+                        <Route path='/' element={<Dashboard/>} />
+                        <Route path='/inventory' element={<Inventory/>} />
+                        <Route path='/stock-movement' element={<StockMovement/>} />
+                        <Route path='/alerts' element={<Alerts/>} />
+                        <Route path='/suppliers' element={<Suppliers/>} />
+                        <Route path='/purchase-orders' element={<PurchaseOrders/>} />
+                        <Route path='/sales-order' element={<SalesOrder/>} />
+                        <Route path='/users' element={<Users/>} />
+                        <Route path='/reports' element={<Reports/>} />
+                        <Route path='/settings' element={<Settings/>} />
+                        <Route path='/inventory' element={<InventoryList/>} />
+
                     </Routes>
-                </div>
-            </div>
-        </Router>
-    );
+                </main>
+                </div>;
+        </ThemeProvider>
+       
+    </ColorModeContext.Provider>
+
+    )
+     
+   
 };
 
 export default App;

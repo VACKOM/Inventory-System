@@ -19,11 +19,19 @@ const ProductReorder = () => {
         productname: name,
         supplier: supplier,
         quantity: '',
-        price: '',
-        total: '',
+        unit_price: '',
+        total_cost: '',
         batchno: '',
         expiringdate: '',
-        notes: ''
+        notes: '',
+
+        unit_price: '',
+        wholesale_price: '',
+        discount: '',
+        tax_rate: '',
+        quantity_in_stock: '',
+        reorder_level: '',
+        reorder_quantity: '',
         
     });
 

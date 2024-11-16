@@ -53,7 +53,15 @@ productRouters.route("/").post(async (request, response) => {
             description: request.body.description,
             category: request.body.category,
             supplier: request.body.supplier,
+            brand: request.body.brand,
+            modelNumber: request.body.modelNumber,
+            location: request.body.location,
+            warehouse: request.body.warehouse,
+            productStatus: request.body.productStatus,
+            warranty: request.body.warranty,
             date: new Date(),
+
+            
         };
         let data = await db.collection("products").insertOne(mongoObject);
         response.status(201).json(data);
@@ -73,7 +81,12 @@ productRouters.route("/:id").put(async (request, response) => {
                 description: request.body.description,
                 category: request.body.category,
                 supplier: request.body.supplier,
-               // date: request.body.date
+                brand: request.body.brand,
+                modelNumber: request.body.modelNumber,
+                location: request.body.location,
+                warehouse: request.body.warehouse,
+                productStatus: request.body.productStatus,
+                warranty: request.body.warranty,
             }
         };
         let data = await db.collection("products").updateOne({ _id: ObjectId(request.params.id) }, mongoObject);
