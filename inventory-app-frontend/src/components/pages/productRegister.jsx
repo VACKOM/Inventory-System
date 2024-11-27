@@ -14,12 +14,10 @@ const ProductRegistration = () => {
     const [product, setProduct] = useState({
         name: '',
         sku: '',
-       // quantity: '',
-        //price: '',
         description: '',
         supplier: '',
         category: '',
-        stock:''
+        reorder: ''
         
     });
 
