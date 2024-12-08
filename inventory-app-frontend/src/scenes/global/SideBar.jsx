@@ -5,20 +5,20 @@ import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import ReactLogo from '../../components/assets/images/react.png';
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import InventoryOutlinedIcon from '@mui/icons-material/InventoryOutlined';
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
-import StockOutlinedIcon from '@mui/icons-material/ShowChartOutlined';
+import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import SupplierOutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import AddAlertOutlinedIcon from '@mui/icons-material/AddAlertOutlined';
 import PurchaseOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import SalesOutlinedIcon from '@mui/icons-material/PointOfSaleOutlined';
+import FilterListOutlinedIcon from '@mui/icons-material/FilterListOutlined';
 import ReportsOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsApplicationsOutlined';
 import UsersOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -47,8 +47,11 @@ const Sidebar = () => {
   return (
     <Box
       sx={{
+        display: "flex",
+        height: "200vh", // Full page height
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
+          height: "200vh !important", // Sidebar takes full height of the page
         },
         "& .pro-icon-wrapper": {
           backgroundColor: "transparent !important",
@@ -83,7 +86,7 @@ const Sidebar = () => {
                 ml="15px"
               >
                 <Typography variant="h3" color={colors.grey[100]}>
-                StockNova
+                KAIPTC 
                 </Typography>
                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                   <MenuOutlinedIcon />
@@ -120,7 +123,6 @@ const Sidebar = () => {
           )}
 
           {/* MENU ITEMS */}
-
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
             <Item
               title="Dashboard"
@@ -135,19 +137,26 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Inventory Management
+              Assets Management
             </Typography>
             <Item
-              title="Stock Managment"
-              to="/stock-movement"
-              icon={<StockOutlinedIcon />}
+              title="Assets"
+              to="/assets"
+              icon={<InventoryOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
             <Item
-              title="Inventory List"
-              to="/inventory"
-              icon={<InventoryOutlinedIcon />}
+              title="Categories"
+              to="/categories"
+              icon={<CategoryOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Suppliers"
+              to="/suppliers"
+              icon={<SupplierOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
@@ -165,28 +174,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
-              title="Sales Order"
-              to="/sales-order"
-              icon={<SalesOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
 
             <Typography
               variant="h6"
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Supplier & User Management
+              UserS & Management
             </Typography>
-            <Item
-              title="Suppliers"
-              to="/suppliers"
-              icon={<SupplierOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
             <Item
               title="Users"
               to="/users"
@@ -194,7 +189,21 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-           
+            <Item
+              title="Department"
+              to="/departments"
+              icon={<FilterListOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Staff"
+              to="/staff"
+              icon={<GroupsOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -216,11 +225,27 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              _____________________
+            </Typography>
+
+            <Item
+              title="LOGOUT"
+              to="/users"
+              icon={<LogoutOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
           </Box>
         </Menu>
       </ProSidebar>
     </Box>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
+

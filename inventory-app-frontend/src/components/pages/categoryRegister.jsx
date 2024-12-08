@@ -8,7 +8,6 @@ const CategoryRegistration = () => {
         name: '',
         description: ''
         
-        
     });
 
     const handleChange = (e) => {

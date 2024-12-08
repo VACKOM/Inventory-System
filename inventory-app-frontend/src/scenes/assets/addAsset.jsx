@@ -5,34 +5,41 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 
 // Validation Schema
-const productSchema = yup.object().shape({
-  productName: yup.string().required("Product name is required"),
-  sku: yup.string().required("SKU is required"),
-  description: yup.string().required("Description is required"),
-  category: yup.string().required("Category is required"),
-  brand: yup.string().required("Brand is required"),
-  modelNumber: yup.string().required("Model number is required"),
-  location: yup.string().required("Location is required"),
-  warehouse: yup.string().required("Warehouse is required"),
-  supplierName: yup.string().required("Supplier's name is required"),
-  productStatus: yup.string().required("Product status is required"),
-  warranty: yup.string().required("Warranty information is required")
+const assetSchema = yup.object().shape({
+ 
+    assetId: yup.string().required("SKU is required"),
+    name: yup.string().required("Asset name is required"),
+    description: yup.string().required("Description is required"),
+    quantity: yup.string().required("Quantity is required"),
+    assetType: yup.string().required("Asset type is required"),
+    serialNo: yup.string().required("Quantity is required"),
+    condition: yup.string().required("Condition is required"),
+    location: yup.string().required("Asset Location is required"),
+    requestingOfficer: yup.string().required("Requesting Officer is required"),
+    requestContact: yup.string().required("Request contact is required"),
+    reason:  yup.string().required("Request reason is required"),
+    supplier: yup.string().required("Supplier is required"),
+    category: yup.string().required("Category is required")
+    
+
 });
 
-const Stock = () => {
+const Asset = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   // State hooks to hold data
   const [category, setCategory] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const navigate = useNavigate(); // Initialize the navigate function
 
-  // Fetch categories and suppliers data
+  // Fetch categories data
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const response = await axios.get("https://node-js-inventory-system.onrender.com/api/category");
+        const response = await axios.get("http://localhost:8080/api/category/");
         setCategory(response.data); // Adjust according to your API response
       } catch (error) {
         console.error("Error fetching category:", error);
@@ -41,10 +48,12 @@ const Stock = () => {
     fetchCategory();
   }, []);
 
+  // Fetch suppliers data
+
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const response = await axios.get("https://node-js-inventory-system.onrender.com/api/supplier");
+        const response = await axios.get("http://localhost:8080/api/supplier/");
         setSuppliers(response.data); // Adjust according to your API response
       } catch (error) {
         console.error("Error fetching suppliers:", error);
@@ -53,54 +62,53 @@ const Stock = () => {
     fetchSuppliers();
   }, []);
 
-  // Helper function to replace part of SKU
-//   function replaceAtIndex(originalString, index, textToReplace) {
-//     if (index < 0 || index >= originalString.length) {
-//       console.error("Index out of bounds");
-//       return originalString;
-//     }
-//     return originalString.slice(0, index) + textToReplace + originalString.slice(index + textToReplace.length);
-//   }
+
 
   // SKU generation logic (category, supplier, random number)
   const generateSku = (category, supplier) => {
     const categoryPrefix = category.substring(0, 2).toUpperCase();
     const supplierPrefix = supplier.substring(0, 2).toUpperCase();
     const randomNum = Math.floor(Math.random() * 1000);
-    return `SKU/${categoryPrefix}/${supplierPrefix}/${randomNum}`;
+    return `AssetID/${categoryPrefix}/${supplierPrefix}/${randomNum}`;
   };
 
   // Handle form submission
   const handleSubmit = async (values) => {
     try {
-      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/product', values);
-      alert('Product registered successfully!');
+      const response = await axios.post('http://localhost:8080/api/asset/', values);
+      alert('Asset registered successfully!');
       console.log(response.data);
+      navigate("/assets");
     } catch (error) {
-      console.error('There was an error registering the product!', error);
-      alert('Error registering product');
+      console.error('There was an error registering the asset!', error);
+      alert('Error registering asset');
     }
   };
 
   return (
     <Box m="20px">
-      <Header title="Create Product" subtitle="Create a New Product" />
+      <Header title="Create Asset" subtitle="Create a New Asset" />
 
       <Formik
         initialValues={{
+          assetId: '',
           name: '',
-          sku: '',
           description: '',
-          category: '',
-          brand: '',
-          modelNumber: '',
+          quantity: '',
+          assetType: '',
+          serialNo: '',
+          condition: '',
           location: '',
-          warehouse: '',
+          requestingOfficer: '',
+          requestContact: '',
+          reason:  '',
           supplier: '',
-          productStatus: 'Active',
-          warranty: ''
+          category: ''
+          
+
+
         }}
-        validationSchema={productSchema}
+        validationSchema={assetSchema}
         onSubmit={handleSubmit}
       >
         {({
@@ -125,21 +133,21 @@ const Stock = () => {
               <TextField
                 fullWidth
                 variant="filled"
-                label="SKU"
+                label="Asset ID"
                 onBlur={handleBlur}
-                value={values.sku}
-                name="sku"
-                error={!!touched.sku && !!errors.sku}
-                helperText={touched.sku && errors.sku}
+                value={values.assetId}
+                name="assetId"
+                error={!!touched.assetId && !!errors.assetId}
+                helperText={touched.assetId && errors.assetId}
                 sx={{ gridColumn: "span 2" }}
                 disabled
               />
 
-              {/* Product Name */}
+              {/* Asset Name */}
               <TextField
                 fullWidth
                 variant="filled"
-                label="Product Name"
+                label="Asset Name"
                 onBlur={handleBlur}
                 onChange={handleChange}
                 value={values.name}
@@ -163,6 +171,35 @@ const Stock = () => {
                 sx={{ gridColumn: "span 2" }}
               />
 
+               {/* Quantity */}
+               <TextField
+                fullWidth
+                variant="filled"
+                label="Quantity"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.quantity}
+                name="quantity"
+                error={!!touched.quantity && !!errors.quantity}
+                helperText={touched.quantity && errors.quantity}
+                sx={{ gridColumn: "span 2" }}
+              />
+
+              {/* Serial Number */}
+              <TextField
+                fullWidth
+                variant="filled"
+                label="Serial Number"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.serialNo}
+                name="serialNo"
+                error={!!touched.serialNo && !!errors.serialNo}
+                helperText={touched.serialNo && errors.serialNo}
+                sx={{ gridColumn: "span 2" }}
+              />
+
+
               {/* Category Select */}
               <FormControl
                 variant="filled"
@@ -178,8 +215,8 @@ const Stock = () => {
                   onChange={(e) => {
                     const selectedCategory = e.target.value;
                     setFieldValue('category', selectedCategory);
-                    const sku = generateSku(selectedCategory, values.supplierName);
-                    setFieldValue('sku', sku);
+                    const sku = generateSku(selectedCategory, values.category);
+                    setFieldValue('assetId', sku);
                   }}
                   onBlur={handleBlur}
                   name="category"
@@ -213,7 +250,7 @@ const Stock = () => {
                     const selectedSupplier = e.target.value;
                     setFieldValue('supplier', selectedSupplier);
                     const sku = generateSku(values.category, selectedSupplier);
-                    setFieldValue('sku', sku);
+                    setFieldValue('assetId', sku);
                   }}
                   onBlur={handleBlur}
                   name="supplier"
@@ -235,26 +272,66 @@ const Stock = () => {
               <TextField
                 fullWidth
                 variant="filled"
-                label="Brand"
+                label="Asset Type"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.brand}
-                name="brand"
-                error={!!touched.brand && !!errors.brand}
-                helperText={touched.brand && errors.brand}
+                value={values.assetType}
+                name="assetType"
+                error={!!touched.assetType && !!errors.assetType}
+                helperText={touched.assetType && errors.assetType}
                 sx={{ gridColumn: "span 2" }}
               />
+
+             <TextField
+                fullWidth
+                variant="filled"
+                label="Condition of Asset"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.condition}
+                name="condition"
+                error={!!touched.condition && !!errors.condition}
+                helperText={touched.condition && errors.condition}
+                sx={{ gridColumn: "span 2" }}
+              />
+
 
               <TextField
                 fullWidth
                 variant="filled"
-                label="Model Number"
+                label="Requesting Officer"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.modelNumber}
-                name="modelNumber"
-                error={!!touched.modelNumber && !!errors.modelNumber}
-                helperText={touched.modelNumber && errors.modelNumber}
+                value={values.requestingOfficer}
+                name="requestingOfficer"
+                error={!!touched.requestingOfficer && !!errors.requestingOfficer}
+                helperText={touched.requestingOfficer && errors.requestingOfficer}
+                sx={{ gridColumn: "span 2" }}
+              />
+
+             <TextField
+                fullWidth
+                variant="filled"
+                label="Request Contact"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.requestContact}
+                name="requestContact"
+                error={!!touched.requestContact && !!errors.requestContact}
+                helperText={touched.requestContact && errors.requestContact}
+                sx={{ gridColumn: "span 2" }}
+              />
+
+             <TextField
+                fullWidth
+                variant="filled"
+                label="Request Reason"
+                onBlur={handleBlur}
+                onChange={handleChange}
+                value={values.reason}
+                name="reason"
+                error={!!touched.reason && !!errors.reason}
+                helperText={touched.reason && errors.reason}
                 sx={{ gridColumn: "span 2" }}
               />
 
@@ -270,37 +347,11 @@ const Stock = () => {
                 helperText={touched.location && errors.location}
                 sx={{ gridColumn: "span 2" }}
               />
-
-              <TextField
-                fullWidth
-                variant="filled"
-                label="Warehouse"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.warehouse}
-                name="warehouse"
-                error={!!touched.warehouse && !!errors.warehouse}
-                helperText={touched.warehouse && errors.warehouse}
-                sx={{ gridColumn: "span 2" }}
-              />
-
-              <TextField
-                fullWidth
-                variant="filled"
-                label="Warranty"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.warranty}
-                name="warranty"
-                error={!!touched.warranty && !!errors.warranty}
-                helperText={touched.warranty && errors.warranty}
-                sx={{ gridColumn: "span 2" }}
-              />
             </Box>
 
             <Box display="flex" justifyContent="end" mt="20px">
               <Button type="submit" color="secondary" variant="contained">
-                Create New Product
+                Create New Asset
               </Button>
             </Box>
           </form>
@@ -310,4 +361,4 @@ const Stock = () => {
   );
 };
 
-export default Stock;
+export default Asset;
