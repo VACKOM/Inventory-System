@@ -24,7 +24,7 @@ import SalesOrder from './scenes/sales';
 import Users from './scenes/users';
 import Reports from './scenes/reports';
 import Settings from './scenes/settings';
-import QRCodeGenerator from './components/assets/QRCodes/qrcodeGenerator';
+import QRCodeGenerator from './components/assets/QRCodes/QRCodeGenerator';
 
 
 const App = () => {
