@@ -9,7 +9,7 @@ const generateOTP = () => {
 
 const sendOTP = async (phoneNumber, otp) => {
   const apiKey = process.env.MNOTIFY_API_KEY;
-console.log(otp);
+//console.log(otp);
   const response = await axios.post('https://apps.mnotify.net/smsapi?', {
     key: apiKey,
     to: phoneNumber,

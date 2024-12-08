@@ -91,10 +91,10 @@ router.post('/verify-otp', (req, res) => {
   }
 
   // Debugging: Log the OTP and phone number being verified
-  console.log('Verifying OTP:', otp);
-  console.log('OTP from OTP data:', otpData.otp);
-  console.log('Phone number from OTP data:', otpData.phoneNumber);
-  console.log('Phone number provided by user:', phoneNumber);
+  // console.log('Verifying OTP:', otp);
+  // console.log('OTP from OTP data:', otpData.otp);
+  // console.log('Phone number from OTP data:', otpData.phoneNumber);
+  // console.log('Phone number provided by user:', phoneNumber);
 
   // Ensure both OTPs are compared as numbers (convert incoming OTP to number)
   const isOtpValid = otpData.otp === Number(otp);  // Convert incoming OTP to number

@@ -45,7 +45,7 @@ exports.getAssetByContact = async (req, res) => {
        
         // Query the asset by the requestContact field
         const asset = await Asset.find({ requestContact: requestInput });
-        console.log(asset); // Log the assets to verify the structure
+        //console.log(asset); // Log the assets to verify the structure
 
         if (asset.length > 0) { // Check if assets are found
             res.json(asset);
@@ -65,7 +65,7 @@ exports.getAssetByName = async (req, res) => {
 
         // Query the asset by the requestContact field
         const asset = await Asset.find({ requestingOfficer: requestInput });
-        console.log(asset); // Log the assets to verify the structure
+        //console.log(asset); // Log the assets to verify the structure
 
         if (asset.length > 0) { // Check if assets are found
             res.json(asset);
