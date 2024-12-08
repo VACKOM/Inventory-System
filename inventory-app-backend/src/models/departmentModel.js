@@ -6,7 +6,7 @@ const departmentSchema = new mongoose.Schema({
     description: { type: String },
     head: { type: String, required: true },
     contact: { type: String, required: true },
-    date: { type: Date, required: true },
+    
     
 
 },

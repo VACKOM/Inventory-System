@@ -4,13 +4,17 @@ const assetSchema = new mongoose.Schema({
     assetId: { type: String, required: true },
     name: { type: String, required: true },
     description: { type: String },
+    quantity: { type: String, required: true },
+    serialNo: { type: String, required: true },
+    condition:{ type: String, required: true },
     assetType:{type: String, required: true},
     location: { type: String, required: true },
-    requestedBy: { type: String, required: true },
+    requestingOfficer: { type: String, required: true },
+    reason: { type: String },
     requestContact: { type: String, required: true },
     supplier: { type: String, required: true },
-    date: { type: Date, required: true },
-    qrCode:{ type: String }
+    category: { type: String, required: true }
+    
 
 },
 {

@@ -28,8 +28,8 @@ const supplierSchema = new mongoose.Schema(
                 },
                 message: props => `${props.value} is not a valid email address!`
             }
-        },
-        date: { type: Date, default: Date.now } // Auto-set creation date
+        }
+        
     },
     {
         timestamps: true,

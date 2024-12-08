@@ -36,6 +36,49 @@ exports.getAssetById = async (req, res) => {
     }
 };
 
+
+/// Retrieve One Asset by requesting contact
+exports.getAssetByContact = async (req, res) => {
+    try {
+        // Extract the requestContact from the URL parameters
+        const { requestInput } = req.params;
+       
+        // Query the asset by the requestContact field
+        const asset = await Asset.find({ requestContact: requestInput });
+        console.log(asset); // Log the assets to verify the structure
+
+        if (asset.length > 0) { // Check if assets are found
+            res.json(asset);
+        } else {
+            res.status(404).json({ message: "No Record Found ooooo :(" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+exports.getAssetByName = async (req, res) => {
+    try {
+        // Extract the requestContact from the URL parameters
+        const { requestInput } = req.params;
+
+        // Query the asset by the requestContact field
+        const asset = await Asset.find({ requestingOfficer: requestInput });
+        console.log(asset); // Log the assets to verify the structure
+
+        if (asset.length > 0) { // Check if assets are found
+            res.json(asset);
+        } else {
+            res.status(404).json({ message: "No Record Found :(" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+
 // Create Asset
 exports.createAsset = async (req, res) => {
     try {
