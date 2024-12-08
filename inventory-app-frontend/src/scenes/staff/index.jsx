@@ -21,7 +21,7 @@ const Staff = ({}) => { // Default searchQuery to an empty string if not provide
   useEffect(() => {
     const fetchStaff = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/staff/');
+        const response = await axios.get('https://node-js-inventory-system.onrender.com/api/staff/');
         setStaff(response.data);
         setLoading(false);  // Data is loaded
       } catch (error) {

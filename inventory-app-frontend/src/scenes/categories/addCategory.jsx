@@ -27,7 +27,7 @@ const Category = () => {
   const handleSubmit = async (values) => {
     setIsLoading(true); // Set loading to true
     try {
-      const response = await axios.post('http://localhost:8080/api/category/', values);
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/category/', values);
       alert('Category registered successfully!');
       navigate("/categories");
     } catch (error) {

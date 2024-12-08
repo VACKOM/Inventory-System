@@ -31,7 +31,7 @@ const Staff = () => {
   useEffect(() => {
     const fetchDepartment = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/department/");
+        const response = await axios.get("https://node-js-inventory-system.onrender.com/api/department/");
         setDepartment(response.data); // Adjust according to your API response
       } catch (error) {
         console.error("Error fetching department:", error);
@@ -53,7 +53,7 @@ const Staff = () => {
   // Handle form submission
   const handleSubmit = async (values) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/staff/', values);
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/staff/', values);
       alert('Staff registered successfully!');
       console.log(response.data);
       navigate("/staff");

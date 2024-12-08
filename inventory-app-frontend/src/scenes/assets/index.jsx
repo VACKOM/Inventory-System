@@ -23,7 +23,7 @@ const Assets = ({}) => {
   useEffect(() => {
     const fetchAssets = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/asset/');
+        const response = await axios.get('https://node-js-inventory-system.onrender.com/api/asset/');
         setAssets(response.data);
         setLoading(false);  // Data is loaded
       } catch (error) {

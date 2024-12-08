@@ -39,7 +39,7 @@ const AssetSign = ({ assets }) => {
                     selectedContact,
                 };
 
-                const response = await axios.post('http://localhost:8080/api/claim/', requestData);
+                const response = await axios.post('https://node-js-inventory-system.onrender.com/api/claim/', requestData);
                 console.log(response.data);
             }
         } catch (error) {

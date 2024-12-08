@@ -30,7 +30,7 @@ const Department = () => {
   const handleSubmit = async (values) => {
     setIsLoading(true); // Set loading to true
     try {
-      const response = await axios.post('http://localhost:8080/api/department/', values);
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/department/', values);
       alert('Department registered successfully!');
       navigate("/departments");
     } catch (error) {

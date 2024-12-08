@@ -31,7 +31,7 @@ const Supplier = () => {
   const handleSubmit = async (values) => {
     setIsLoading(true); // Set loading to true
     try {
-      const response = await axios.post('http://localhost:8080/api/supplier/', values);
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/supplier/', values);
       alert('Supplier registered successfully!');
       navigate("/suppliers");
     } catch (error) {

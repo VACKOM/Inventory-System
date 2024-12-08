@@ -21,7 +21,7 @@ const Suppliers = ({}) => { // Default searchQuery to an empty string if not pro
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/supplier/');
+        const response = await axios.get('https://node-js-inventory-system.onrender.com/api/supplier/');
         const combinedData = response.data.map((supplier) => ({
           id: supplier.supplierId,  // Unique 'id' for DataGrid
           supplierId: supplier.supplierId,

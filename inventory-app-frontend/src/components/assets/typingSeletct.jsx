@@ -23,7 +23,7 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
   useEffect(() => {
     const fetchAssets = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/staff/');
+        const response = await axios.get('https://node-js-inventory-system.onrender.com/api/staff/');
         setOptions(response.data);
         setLoading(false);
       } catch (error) {
@@ -44,7 +44,7 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/api/otp/send-otp/', { phoneNumber: selectedOption });
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/otp/send-otp/', { phoneNumber: selectedOption });
       setOtpId(response.data.otpId); // Store the otpId for later verification
       setOtp('');  // Clear the OTP input field for second OTP
       alert('OTP successfully sent!');
@@ -65,7 +65,7 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/api/otp/verify-otp/', { phoneNumber: selectedOption, otp, otpId });
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/otp/verify-otp/', { phoneNumber: selectedOption, otp, otpId });
       if (response.data.success) {
         alert('OTP verified successfully!');
         setIsFirstOtpVerified(true); // Mark first OTP as verified
@@ -88,7 +88,7 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/api/otp/verify-otp/', { phoneNumber: selectedOption, otp, otpId });
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/otp/verify-otp/', { phoneNumber: selectedOption, otp, otpId });
       if (response.data.success) {
         alert('OTP verified successfully!');
         const finalSubmit = "true";
@@ -111,7 +111,7 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/api/otp/send-otp/', { phoneNumber: selectedOption });
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/otp/send-otp/', { phoneNumber: selectedOption });
       setOtpId(response.data.otpId); // Store new otpId for the second OTP verification
       setOtp('');  // Clear the OTP input field for second OTP
       alert('Second OTP successfully sent!');

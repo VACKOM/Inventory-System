@@ -39,8 +39,8 @@ const Claims = () => {
             const isContact = /^[0-9]+$/.test(requestInput); // Regex to check if input is numeric
 
             const url = isContact
-                ? `http://localhost:8080/api/asset/contact/${requestInput}`  // Search by contact number
-                : `http://localhost:8080/api/asset/name/${requestInput}`;  // Search by name
+                ? `https://node-js-inventory-system.onrender.com/api/asset/contact/${requestInput}`  // Search by contact number
+                : `https://node-js-inventory-system.onrender.com/api/asset/name/${requestInput}`;  // Search by name
 
             const response = await axios.get(url);
             setAssets(response.data);

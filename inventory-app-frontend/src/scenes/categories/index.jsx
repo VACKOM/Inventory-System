@@ -21,7 +21,7 @@ const Categories = ({}) => { // Default searchQuery to an empty string if not pr
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/category/');
+        const response = await axios.get('https://node-js-inventory-system.onrender.com/api/category/');
         const combinedData = response.data.map((category) => ({
           id: category.categoryId,  // Unique 'id' for DataGrid
           categoryId: category.categoryId,

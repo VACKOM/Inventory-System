@@ -39,7 +39,7 @@ const Asset = () => {
   useEffect(() => {
     const fetchCategory = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/category/");
+        const response = await axios.get("https://node-js-inventory-system.onrender.com/api/category/");
         setCategory(response.data); // Adjust according to your API response
       } catch (error) {
         console.error("Error fetching category:", error);
@@ -53,7 +53,7 @@ const Asset = () => {
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/supplier/");
+        const response = await axios.get("https://node-js-inventory-system.onrender.com/api/supplier/");
         setSuppliers(response.data); // Adjust according to your API response
       } catch (error) {
         console.error("Error fetching suppliers:", error);
@@ -75,7 +75,7 @@ const Asset = () => {
   // Handle form submission
   const handleSubmit = async (values) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/asset/', values);
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/asset/', values);
       alert('Asset registered successfully!');
       console.log(response.data);
       navigate("/assets");
