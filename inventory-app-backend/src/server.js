@@ -3,7 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 const dotenv = require("dotenv").config();
-const dbConnect = require("./config/connect");
+// const dbConnect = require("./config/connect");
 
 const stockRouter = require("./routes/api/stockRouter");
 const assetRoutes = require("./routes/api/assetRoutes");
@@ -13,6 +13,7 @@ const departmentRoutes = require("./routes/api/departmentRoutes");
 const categoryRoutes = require("./routes/api/categoryRoutes");
 const optRoutes = require('./routes/users/otpRoutes');
 const claimRoutes = require('./routes/api/claimRoutes');
+const tuyaRoutes = require('./routes/users/tuyaRoutes');
 
 const authRoutes = require("./routes/users/authRouters");
 const userRoutes = require("./routes/users/userRouters");
@@ -32,13 +33,14 @@ app.use('/api/supplier', supplierRoutes);
 app.use('/api/department', departmentRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/otp', optRoutes);
+app.use('/users', tuyaRoutes)
 app.use('/api/claim', claimRoutes);
 
 app.use('/api/auth' , authRoutes);
 app.use('/api/users', userRoutes);
 
 //Connect to the database and then start the server  
-dbConnect();
+// dbConnect();
 const PORT= process.env.PORT || 5000;
 
 app.listen(PORT, () =>{
