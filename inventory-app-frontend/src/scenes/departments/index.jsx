@@ -21,7 +21,7 @@ const Departments = ({}) => { // Default searchQuery to an empty string if not p
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/department/');
+        const response = await axios.get('https://node-js-inventory-system.onrender.com/api/department/');
         const combinedData = response.data.map((department) => ({
           id: department.departmentId,  // Unique 'id' for DataGrid
           departmentId: department.departmentId,

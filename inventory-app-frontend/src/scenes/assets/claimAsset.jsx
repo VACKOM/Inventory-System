@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, useTheme, CircularProgress, TextField, Button } from "@mui/material";
-import { tokens } from "../../theme";
+import { Box, CircularProgress, TextField, Button } from "@mui/material";
 import axios from 'axios';
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import AssetGrid from '../../components/assets/assetGrid';  // Import the AssetGrid component
 import AssetDetails from '../../components/assets/assetDetails';  // Import the AssetDetails component
 import AssetSign from '../../components/assets/assetSign';
+import { useLocation } from 'react-router-dom';
 
 const Claims = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
     const [requestInput, setRequestInput] = useState('');
     const [assets, setAssets] = useState([]);
     const [assetsList, setAssetsList] = useState([]);
@@ -20,27 +18,45 @@ const Claims = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [isOpen, setIsOpen] = useState(true);
     const [isDataLoaded, setIsDataLoaded] = useState(false);  // Track if data is loaded
+    const location = useLocation();
 
-    // Handle phone number or name input change
-    const handleRequestContactChange = (e) => {
-        setRequestInput(e.target.value);
-    };
+    // Extract query parameters (use URLSearchParams to read the query string)
+    useEffect(() => {
+        const queryParams = new URLSearchParams(location.search);
+        const requestInputFromURL = queryParams.get('requestInput');
+        if (requestInputFromURL) {
+            setRequestInput(requestInputFromURL); // Update the state with the query parameter
+        }
+    }, [location.search]);
 
-    // Fetch assets based on requestInput (name or phone number)
+    // Fetch assets based on requestInput (assetId, name, or phone number)
     const fetchAssets = async () => {
         if (!requestInput) {
-            setError('Please enter a name or a contact number');
+            setError('Please enter an asset ID, name, or contact number');
             return;
         }
         setLoading(true);
         setError('');  // Reset error state
 
         try {
-            const isContact = /^[0-9]+$/.test(requestInput); // Regex to check if input is numeric
+            let url = '';
 
-            const url = isContact
-                ? `https://node-js-inventory-system.onrender.com/api/asset/contact/${requestInput}`  // Search by contact number
-                : `https://node-js-inventory-system.onrender.com/api/asset/name/${requestInput}`;  // Search by name
+            // Check if the requestInput is a valid assetId (e.g., numeric or alphanumeric)
+            const isAssetId = /^[A-Za-z0-9\/]+$/.test(requestInput); // Regex to check if input is alphanumeric
+            const isContact = /^[0-9]+$/.test(requestInput); // Regex to check if input is numeric (for contact number)
+            
+             if (isContact) {
+                // Search by contact number
+                url = `https://node-js-inventory-system.onrender.com/api/asset/contact/${requestInput}`;
+            } else if (isAssetId){
+                // Encode the requestInput (assetId) to handle special characters
+                const encodedAssetId = encodeURIComponent(requestInput);
+                // Construct the URL with the encoded assetId
+                url = `https://node-js-inventory-system.onrender.com/api/asset/assetId/${encodedAssetId}`;
+            }   else {
+                // Search by name
+                url = `https://node-js-inventory-system.onrender.com/api/asset/name/${requestInput}`;
+            }
 
             const response = await axios.get(url);
             setAssets(response.data);
@@ -52,6 +68,13 @@ const Claims = () => {
             setLoading(false);
         }
     };
+
+    // Trigger fetchAssets whenever the requestInput state changes
+    useEffect(() => {
+        if (requestInput) {
+            fetchAssets();  // Trigger asset fetch whenever requestInput changes
+        }
+    }, [requestInput]);
 
     // Update assets list whenever assets data changes
     useEffect(() => {
@@ -91,6 +114,7 @@ const Claims = () => {
         fetchAssets();  // Trigger the fetchAssets function when the form is submitted
     };
 
+
     if (!isOpen) return null;
 
     return (
@@ -108,7 +132,7 @@ const Claims = () => {
                                 variant="filled"
                                 id="requestInput"
                                 value={requestInput}
-                                onChange={handleRequestContactChange}
+                                onChange={(e) => setRequestInput(e.target.value)}
                                 label="Enter Staff Name or Phone Number"
                             />
                             {/* Search Assets Input */}
@@ -136,7 +160,7 @@ const Claims = () => {
                     {assetsList.length > 0 && !loading && (
                         <Box m="40px 0 0 0" height="45vh">
                             <AssetDetails assets={assets} />
-                            <AssetGrid assets={filteredAssets} />
+                            {/* <AssetGrid assets={filteredAssets} /> */}
                             <AssetSign assets={assets} />
                         </Box>
                     )}

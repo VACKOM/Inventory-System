@@ -16,6 +16,7 @@ const AssetDetails = ({ assets }) => {
                 <p>Requesting Officer: {requestingOfficer}</p>
                 <p>Contact: {requestContact}</p>
                 <p>Job Location: {location}</p>
+                <p>Approving Authority: Mike Dua</p>
             </Typography>
            
         </Box>

@@ -9,23 +9,24 @@ import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 
 // Validation Schema
 const assetSchema = yup.object().shape({
- 
-    assetId: yup.string().required("SKU is required"),
-    name: yup.string().required("Asset name is required"),
-    description: yup.string().required("Description is required"),
-    quantity: yup.string().required("Quantity is required"),
-    assetType: yup.string().required("Asset type is required"),
-    serialNo: yup.string().required("Quantity is required"),
-    condition: yup.string().required("Condition is required"),
-    location: yup.string().required("Asset Location is required"),
-    requestingOfficer: yup.string().required("Requesting Officer is required"),
-    requestContact: yup.string().required("Request contact is required"),
-    reason:  yup.string().required("Request reason is required"),
-    supplier: yup.string().required("Supplier is required"),
-    category: yup.string().required("Category is required")
-    
-
+  assetId: yup.string().required("SKU is required"),
+  name: yup.string().required("Asset name is required"),
+  description: yup.string().required("Description is required"),
+  assetType: yup.string().required("Asset type is required"),
+  serialNo: yup.string().required("Serial Number is required"),
+  condition: yup.string().required("Condition is required"),
+  location: yup.string().required("Asset Location is required"),
+  requestingOfficer: yup.string().required("Requesting Officer is required"),
+  requestContact: yup.string().required("Request contact is required"),
+  reason: yup.string().required("Request reason is required"),
+  supplier: yup.string().required("Supplier is required"),
+  category: yup.string().required("Category is required"),
+  qtySupplied: yup.number().required("Supplied Quantity is required"),
+  quantity: yup.number()
+    .oneOf([yup.ref('qtySupplied')], "Quantity must be equal to Quantity Supplied") // Custom validation
+    .required("Quantity is required")
 });
+
 
 const Asset = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -103,7 +104,8 @@ const Asset = () => {
           requestContact: '',
           reason:  '',
           supplier: '',
-          category: ''
+          category: '',
+          qtySupplied:''
           
 
 
@@ -175,13 +177,13 @@ const Asset = () => {
                <TextField
                 fullWidth
                 variant="filled"
-                label="Quantity"
+                label="Quantity Supplied"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.quantity}
-                name="quantity"
-                error={!!touched.quantity && !!errors.quantity}
-                helperText={touched.quantity && errors.quantity}
+                value={values.qtySupplied}
+                name="qtySupplied"
+                error={!!touched.qtySupplied && !!errors.qtySupplied}
+                helperText={touched.qtySupplied && errors.qtySupplied}
                 sx={{ gridColumn: "span 2" }}
               />
 
