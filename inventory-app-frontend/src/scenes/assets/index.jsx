@@ -7,7 +7,6 @@ import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 import Topbar from '../global/Topbar';  // Import your Topbar component
 
-
 const Assets = ({}) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -17,7 +16,7 @@ const Assets = ({}) => {
   const [error, setError] = useState(null); // Add an error state
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate(); // Initialize the navigate function
-
+  
 
   // Fetch assets
   useEffect(() => {
@@ -38,37 +37,39 @@ const Assets = ({}) => {
   // Update assets list when assets data is fetched
   useEffect(() => {
     if (assets.length > 0) {
-      const combinedData = assets.map((asset) => {
-        return {
-          ID: asset._id,
-          id: asset.assetId, // Ensure each row has a unique 'id' property
-          assetId: asset.assetId,
-          name: asset.name,
-          description: asset.description,
-          quantity: asset.quantity ? asset.quantity : 0,
-          requestingOfficer: asset.requestingOfficer,
-          requestContact: asset.requestContact,
-          location: asset.location,
-          category: asset.category,
-          access: asset.access, // Assuming you have 'access' in your asset data
-        };
-      });
-      setAssetsList(combinedData);
+      const combinedData = assets
+        .filter((asset) => asset.quantity > 0)  // Filter out assets with quantity 0
+        .map((asset) => {
+          return {
+            ID: asset._id,
+            id: asset.assetId, // Ensure each row has a unique 'id' property
+            assetId: asset.assetId,
+            name: asset.name,
+            description: asset.description,
+            quantity: asset.quantity ? asset.quantity : 0,
+            qtyTaken: asset.qtyTaken,
+            requestingOfficer: asset.requestingOfficer,
+            requestContact: asset.requestContact,
+            location: asset.location,
+            category: asset.category,
+            access: asset.access, // Assuming you have 'access' in your asset data
+          };
+        });
+      setAssetsList(combinedData);  // Update the assetsList state
     }
   }, [assets]);
+  
 
   // Button to generate QR Code
   const handleButtonClick = (rowData) => {
     console.log("Button clicked for asset: ", rowData);
     const qrcode = `Asset ID: ${rowData.assetId}, Asset Name: ${rowData.name}, Asset Description: ${rowData.description}, Asset Location: ${rowData.location}`;
-   // alert(qrcode);
     navigate(`/qrcode-generator?qrcode=${encodeURIComponent(qrcode)}`);
   };
 
   // Button to generate Claims
   const handleClaimClick = (rowData) => {
     navigate(`/claim-asset`);
-    
   };
 
   // Button Add New Asset click handler
@@ -91,14 +92,31 @@ const Assets = ({}) => {
     );
   });
 
-  // Columns for DataGrid
+  // Handle row update (when user types into the grid)
+  const handleRowEdit = async (updatedRow) => {
+    const updatedAssets = assetsList.map((asset) =>
+      asset.ID === updatedRow.ID ? { ...asset, ...updatedRow } : asset
+    );
+    setAssetsList(updatedAssets);  // Update local state immediately for a better user experience
+
+    try {
+      // Make an API call to update the asset on the server
+      await axios.put(`https://node-js-inventory-system.onrender.com/api/asset/${updatedRow.ID}`, updatedRow);
+    } catch (error) {
+      console.error('Error updating asset:', error);
+    }
+
+    return updatedRow; // Return the updated row data for the grid to process
+  };
+
+  // Columns for DataGrid with editable fields
   const columns = [
-    { field: "id", headerName: "Asset ID" },
-    { field: "name", headerName: "Asset Name", flex: 1 },
-    { field: "description", headerName: "Description", flex: 1 },
-    { field: "quantity", headerName: "Quantity", type: "number", headerAlign: "left", align: "left" },
-    { field: "requestingOfficer", headerName: "Requesting Officer", flex: 1 },
-    { field: "requestContact", headerName: "Contact", flex: 1 },
+    { field: "id", headerName: "Asset ID", editable: false },
+    { field: "name", headerName: "Asset Name", flex: 1, editable: true },
+    { field: "description", headerName: "Description", flex: 1, editable: true },
+    { field: "quantity", headerName: "Quantity", type: "number", headerAlign: "left", align: "left", editable: true },
+    { field: "requestingOfficer", headerName: "Requesting Officer", flex: 1, editable: true },
+    { field: "requestContact", headerName: "Contact", flex: 1, editable: true },
     {
       field: "qrCode", // This field represents the button
       headerName: "QR Code",
@@ -114,6 +132,55 @@ const Assets = ({}) => {
       width: 150, // You can adjust the width as needed
     },
   ];
+
+
+  const handleSelectionModelChange = (selectionModel) => {
+    // Log the selection model to ensure it's working
+    console.log('Selection Model:', selectionModel);
+
+    // Check if the selectionModel is not empty
+    if (selectionModel && selectionModel.length > 0) {
+        const selectedAssetIds = selectionModel.map((id) => {
+            const asset = assetsList.find((asset) => asset.id === id);
+            return asset ? asset.assetId : null;
+        }).filter((assetId) => assetId !== null);  // Filter out any null values
+
+        // Show the alert with the selected asset IDs
+        if (selectedAssetIds.length > 0) {
+            alert(`Selected Asset IDs: ${selectedAssetIds.join(', ')}`);
+        }
+    } else {
+        console.log('No rows selected');
+    }
+};
+
+
+
+  // Handle cell click and alert the content
+const handleCellClick = (params) => {
+  const columnName = params.field;  // The field name (column header)
+  const cellValue = params.value;   // The value in the clicked cell
+  let requestInput = "";            // Use 'let' to allow reassignment
+  alert(`Column: ${columnName}\nContent: ${cellValue}`);
+
+  if (columnName === "requestContact") {
+    requestInput = cellValue;       // Now you can reassign the value
+    navigate(`/claim-asset?requestInput=${encodeURIComponent(requestInput)}`);
+  }
+  else if (columnName === "requestingOfficer") {
+    requestInput = cellValue;       // Now you can reassign the value
+    navigate(`/claim-asset?requestInput=${encodeURIComponent(requestInput)}`);
+  }
+  else if (columnName === "id") {
+    const requestInput = cellValue; // Get the cell value as the assetId
+    // URL-encode the requestInput (AssetId)
+    const encodedInput = encodeURIComponent(requestInput);
+    // Navigate with the encoded assetId as a query parameter
+    navigate(`/claim-asset?requestInput=${encodedInput}`);
+}
+};
+
+
 
   return (
     <Box m="20px">
@@ -150,12 +217,19 @@ const Assets = ({}) => {
         <Typography color="error" variant="h6" align="center">{error}</Typography>
       ) : (
         <Box m="40px 0 0 0" height="75vh">
-          <DataGrid checkboxSelection rows={filteredAssets} columns={columns} />
+          <DataGrid 
+            //checkboxSelection 
+            rows={filteredAssets} 
+            columns={columns} 
+            processRowUpdate={handleRowEdit} // Handle row edits
+            onCellClick={handleCellClick}  // Add this to handle cell clicks
+            onSelectionModelChange={handleSelectionModelChange}  // Correct event handler for checkbox clicks
+          />
         </Box>
       )}
-
     </Box>
   );
 };
 
 export default Assets;
+

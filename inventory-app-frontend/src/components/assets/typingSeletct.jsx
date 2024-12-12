@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Box, Typography, useTheme, CircularProgress, Select, TextField, MenuItem, Button, InputLabel,FormControl } from "@mui/material";
+import { Box, Typography, useTheme, CircularProgress, Select, TextField, MenuItem, Button, InputLabel, FormControl, Checkbox, FormControlLabel } from "@mui/material";
 import { tokens } from "../../theme";
 import axios from 'axios';
 
-const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
+const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified, onUndertaken }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [options, setOptions] = useState([]);
@@ -18,6 +18,8 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
   const [isSecondOtpSent, setIsSecondOtpSent] = useState(false); // Flag to track if second OTP was sent
   const [isSecondOtpVerified, setIsSecondOtpVerified] = useState(false);
   const [showSecondOtpButton, setShowSecondOtpButton] = useState(false); // Flag for second OTP button
+  const [undertakingMessage, setUndertakingMessage] = useState(''); // State to hold the undertaking message
+  const [checked, setIsChecked] = useState(false); // State to track if user has agreed to the undertaking
 
   // Fetch assets (your contacts data)
   useEffect(() => {
@@ -34,7 +36,7 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
     fetchAssets();
   }, []);
 
-  const final ="false"
+  const final = "false";
 
   // Handle OTP sending
   const sendOTP = async () => {
@@ -79,7 +81,6 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
     }
   };
 
-
   // Handle final OTP verification
   const verifyOTP2 = async () => {
     if (!otp || !otpId) {
@@ -94,6 +95,8 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
         const finalSubmit = "true";
         setIsSecondOtpVerified(true);
         onSecondOtpVerified(finalSubmit); // Call the function passed from parent
+        onUndertaken(checked);
+        
       } else {
         alert('Invalid OTP!');
       }
@@ -130,11 +133,20 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
     const selectedContact = event.target.value;
     setSelectedOption(selectedContact);
     onContactSelect(selectedContact); // Call the function passed from parent
+    // Display the undertaking message
+    const selectedContactData = options.find(option => option.contact === selectedContact);
+    if (selectedContactData) {
+      setUndertakingMessage(`I, ${selectedContactData.firstName} ${selectedContactData.lastName} undertake to replace the PC/ Laptop Computer if damaged out of own negligence.`);
+    }
   };
 
   const filteredOptions = options.filter(option =>
     option.contact.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleAgreementChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
 
   return (
     <Box>
@@ -160,45 +172,77 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
             <Typography color="error">{error}</Typography>
           ) : (
             <>
+              <FormControl fullWidth variant="filled">
+                <InputLabel id="selected-contact-label" sx={{ color: colors[100] }}>
+                  Select Staff Contact
+                </InputLabel>
+                <Select
+                  labelId="selected-contact-label"
+                  value={selectedOption}
+                  onChange={handleSelectChange}
+                  label="Selected Staff Contact"
+                  sx={{
+                    backgroundColor: colors[700],
+                    color: colors[100],
+                    '& .MuiInputBase-root': {
+                      borderRadius: '8px',
+                    },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {filteredOptions.map((option, index) => (
+                    <MenuItem key={index} value={option.contact}>
+                      {option.contact}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-<FormControl fullWidth variant="filled">
-                                    <InputLabel id="selected-contact-label" sx={{ color: colors[100] }}>
-                                        Select Staff Contact
-                                    </InputLabel>
-                                    <Select
-                                        labelId="selected-contact-label"
-                                        value={selectedOption}
-                                        onChange={handleSelectChange}
-                                        label="Selected  Staff Contact"
-                                        sx={{
-                                            backgroundColor: colors[700],
-                                            color: colors[100],
-                                            '& .MuiInputBase-root': {
-                                                borderRadius: '8px',
-                                            },
-                                        }}
-                                    >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                  
-                                        {filteredOptions.map((option, index) => (
-                                        <MenuItem key={index} value={option.contact}>
-                                          {option.contact}
-                                        </MenuItem>
-                                      ))}
-                                    </Select>
-                                </FormControl>
-
-                {selectedOption && (
+              {selectedOption && (
                 <Typography variant="h6" style={{ marginTop: '10px' }}>
-                  Selected Contact: {selectedOption}
+                  {/* Selected Contact: {selectedOption} */}
                 </Typography>
               )}
             </>
           )}
         </>
       )}
+
+      {/* Display the undertaking message */}
+      {undertakingMessage && (
+        <Box mt={4}>
+          <Typography variant="h3" color={theme.palette.secondary.main} align="left" gutterBottom>
+          Recipient Undertaking:
+          </Typography>
+          <Typography variant="h6" color={colors[200]} align="left" paragraph>
+            {undertakingMessage}
+          </Typography>
+          
+          <FormControlLabel
+           control={
+            <Checkbox
+                checked={checked}
+                onChange={handleAgreementChange}
+                color="primary"
+                sx={{
+                    '&.Mui-checked': {
+                        color: theme.palette.secondary.main,
+                    },
+                }}
+            />
+        }
+            label="I agree to the above undertaking."
+            sx={{
+              color: colors[200],
+              display: 'flex',
+              justifyContent: 'left',
+          }}
+          />
+        </Box>
+      )}
+
 
       {/* OTP input after sending OTP */}
       {isOtpSent && !isFirstOtpVerified && (
@@ -239,53 +283,63 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified  }) => {
 
       {/* Show second OTP button after first OTP is verified */}
       {showSecondOtpButton && !isSecondOtpSent && (
-        <Box mt={4} display="flex" justifyContent="right">
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={sendSecondOTP}
-            sx={{
-              padding: "12px 30px",
-              borderRadius: '12px',
-              fontSize: '1.1rem',
-              textTransform: 'none',
-              boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-              backgroundColor: theme.palette.secondary.main,
-              '&:hover': {
-                backgroundColor: theme.palette.secondary.dark,
-                boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.2)',
-              },
-            }}
-          >
-            Send Acceptance Code
-          </Button>
-        </Box>
+        
+        <Box mt={4} display="flex" flexDirection="column" alignItems="flex-start" sx={{ width: '100%' }}>
+  <p style={{ margin: 0 }} ><h3>Use the collection code to Unlock the security Door. You have 5 mins to do that.</h3></p>
+  <Box display="flex" justifyContent="flex-end" sx={{ width: '100%' }}>
+    <Button
+      variant="contained"
+      color="secondary"
+      onClick={sendSecondOTP}
+      sx={{
+        padding: "12px 30px",
+        borderRadius: '12px',
+        fontSize: '1.1rem',
+        textTransform: 'none',
+        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+        backgroundColor: theme.palette.secondary.main,
+        '&:hover': {
+          backgroundColor: theme.palette.secondary.dark,
+          boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.2)',
+        },
+      }}
+    >
+      Send Acceptance Code
+    </Button>
+  </Box>
+</Box>
+
+
+      
       )}
 
       {/* Send Collection Code button is always visible only if OTP hasn't been sent */}
-      {!isOtpSent && (
-        <Box mt={4} display="flex" justifyContent="right">
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={sendOTP}
-            sx={{
-              padding: "12px 30px",
-              borderRadius: '12px',
-              fontSize: '1.1rem',
-              textTransform: 'none',
-              boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
-              backgroundColor: theme.palette.secondary.main,
-              '&:hover': {
-                backgroundColor: theme.palette.secondary.dark,
-                boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.2)',
-              },
-            }}
-          >
-            Send Collection Code
-          </Button>
-        </Box>
-      )}
+      {/* // Add the button for "Send Collection Code" only if OTP hasn't been sent */}
+{!isOtpSent && (
+  <Box mt={4} display="flex" justifyContent="right">
+    <Button
+      variant="contained"
+      color="secondary"
+      onClick={sendOTP}
+      disabled={!checked}  // Disable the button if "I agree" is not checked
+      sx={{
+        padding: "12px 30px",
+        borderRadius: '12px',
+        fontSize: '1.1rem',
+        textTransform: 'none',
+        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+        backgroundColor: theme.palette.secondary.main,
+        '&:hover': {
+          backgroundColor: theme.palette.secondary.dark,
+          boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.2)',
+        },
+      }}
+    >
+      Send Collection Code
+    </Button>
+  </Box>
+)}
+
 
       {isSecondOtpSent && (
         <Box mt={4}>
