@@ -35,7 +35,7 @@ const AssetSign = ({ assets }) => {
                 console.log(`Asset ID from selected cells ${assetIdString}`)
 
                 // Get the asset details (including name) from the Assets collection
-                const assetDetailsResponse = await axios.get(`http://localhost:8080/api/asset/assetId/${encodeURIComponent(assetIdString)}`);
+                const assetDetailsResponse = await axios.get(`https://node-js-inventory-system.onrender.com/api/asset/assetId/${encodeURIComponent(assetIdString)}`);
                 const assetDetails = assetDetailsResponse.data;  // This will contain the asset details
                 console.log(`Name for each Asset ID from selected cells ${assetDetails.name}`)
                 
@@ -62,13 +62,13 @@ const AssetSign = ({ assets }) => {
                 };
     
                 // Make the POST request to register the claim
-                const response = await axios.post('http://localhost:8080/api/claim/', claimData);
+                const response = await axios.post('https://node-js-inventory-system.onrender.com/api/claim/', claimData);
                 console.log(response.data);
     
                 // Now update the asset in the server
                 try {
                     const encodedAssetId = encodeURIComponent(assetIdString);  // Handle assetId or _id
-                    const updateResponse = await axios.put(`http://localhost:8080/api/asset/assetId/${encodedAssetId}`, updatedAssetData);
+                    const updateResponse = await axios.put(`https://node-js-inventory-system.onrender.com/api/asset/assetId/${encodedAssetId}`, updatedAssetData);
                     console.log('Asset updated:', updateResponse.data);
                 } catch (error) {
                     console.error('Error updating asset:', error);

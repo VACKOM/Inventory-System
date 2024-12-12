@@ -17,7 +17,7 @@ function Reports() {
   // Fetch the list of tables and fields from the backend
   useEffect(() => {
     setLoading(true);
-    axios.get('http://localhost:8080/api/tables')
+    axios.get('https://node-js-inventory-system.onrender.com/api/tables')
       .then(response => {
         setTables(response.data);
         setLoading(false);
@@ -58,7 +58,7 @@ function Reports() {
     }
 
     setLoading(true);
-    axios.post('http://localhost:8080/api/tables/getReportData', {
+    axios.post('https://node-js-inventory-system.onrender.com/api/tables/getReportData', {
       table: selectedTable,
       field: selectedField,
       value: fieldValue,

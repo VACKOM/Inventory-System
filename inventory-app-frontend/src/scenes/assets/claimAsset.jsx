@@ -47,15 +47,15 @@ const Claims = () => {
             
              if (isContact) {
                 // Search by contact number
-                url = `http://localhost:8080/api/asset/contact/${requestInput}`;
+                url = `https://node-js-inventory-system.onrender.com/api/asset/contact/${requestInput}`;
             } else if (isAssetId){
                 // Encode the requestInput (assetId) to handle special characters
                 const encodedAssetId = encodeURIComponent(requestInput);
                 // Construct the URL with the encoded assetId
-                url = `http://localhost:8080/api/asset/assetId/${encodedAssetId}`;
+                url = `https://node-js-inventory-system.onrender.com/api/asset/assetId/${encodedAssetId}`;
             }   else {
                 // Search by name
-                url = `http://localhost:8080/api/asset/name/${requestInput}`;
+                url = `https://node-js-inventory-system.onrender.com/api/asset/name/${requestInput}`;
             }
 
             const response = await axios.get(url);
