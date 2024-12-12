@@ -46,7 +46,7 @@ const TypingSelectBox = ({ onContactSelect, onSecondOtpVerified, onUndertaken })
     }
 
     try {
-      const response = await axios.post('https://node-js-inventory-system.onrender.com/api/otp/send-otp/', { phoneNumber: selectedOption });
+      const response = await axios.post('https://node-js-inventory-system.onrender.com/users/send-otp/', { phoneNumber: selectedOption });
       setOtpId(response.data.otpId); // Store the otpId for later verification
       setOtp('');  // Clear the OTP input field for second OTP
       alert('OTP successfully sent!');

@@ -13,7 +13,11 @@ const departmentRoutes = require("./routes/api/departmentRoutes");
 const categoryRoutes = require("./routes/api/categoryRoutes");
 const optRoutes = require('./routes/users/otpRoutes');
 const claimRoutes = require('./routes/api/claimRoutes');
+
+const tuyaRoutes = require('./routes/users/tuyaRoutes');
+
 const reportRoutes = require('./routes/api/reportRoutes');
+
 
 
 const authRoutes = require("./routes/users/authRouters");
@@ -34,12 +38,14 @@ app.use('/api/supplier', supplierRoutes);
 app.use('/api/department', departmentRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/otp', optRoutes);
+app.use('users', tuyaRoutes)
 app.use('/api/claim', claimRoutes);
 app.use('/api/tables', reportRoutes);
 
 
 app.use('/api/auth' , authRoutes);
 app.use('/api/users', userRoutes);
+
 
 //Connect to the database and then start the server      
 dbConnect();
