@@ -11,7 +11,7 @@ const staffRoutes = require("./routes/api/staffRoutes");
 const supplierRoutes = require("./routes/api/supplierRoutes");
 const departmentRoutes = require("./routes/api/departmentRoutes");
 const categoryRoutes = require("./routes/api/categoryRoutes");
-//const optRoutes = require('./routes/users/otpRoutes');
+const optRoutes = require('./routes/users/otpRoutes');
 const claimRoutes = require('./routes/api/claimRoutes');
 
 const tuyaRoutes = require('./routes/users/tuyaRoutes');
@@ -37,8 +37,8 @@ app.use('/api/staff', staffRoutes);
 app.use('/api/supplier', supplierRoutes);
 app.use('/api/department', departmentRoutes);
 app.use('/api/category', categoryRoutes);
-//app.use('/api/otp', optRoutes);
-app.use('/api/otp', tuyaRoutes)
+app.use('/api/otp', optRoutes);
+app.use('users', tuyaRoutes)
 app.use('/api/claim', claimRoutes);
 app.use('/api/tables', reportRoutes);
 
