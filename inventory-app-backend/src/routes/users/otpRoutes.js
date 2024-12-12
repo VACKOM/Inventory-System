@@ -55,7 +55,7 @@ router.post('/send-otp', async (req, res) => {
     // Log the OTP request time for rate limiting
     otpRequestCount[phoneNumber].push(currentTime);
 
-    // Call function to send OTP (this is assumed to send the OTP via SMS or email)
+    // Call function to send OTP (this is assumed to send the OTP via SMS or email) 
     const response = await sendOTP(phoneNumber, otp);
 
     // Send the OTP response back to the client (omit OTP for security in real app)
